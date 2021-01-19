@@ -1,0 +1,111 @@
+import {setItem} from '@/helpers/persistanceStorage';
+import authApi from '../../api/authorization';
+
+const state = {
+  currentUser: null,
+  isSubmitting: false,
+  isLoggedIn: false,
+};
+export const getterTypes = {
+  currentUser: '[auth] currentUser',
+  isSubmitting: '[auth] isSubmitting',
+  isLoggedIn: '[auth] isLoggedIn',
+};
+
+export const mutationTypes = {
+  loginStart: '[auth] loginStart',
+  loginSuccess: '[auth] loginSuccess',
+  loginFailure: '[auth] loginFailure',
+
+  getCurrentUserStart: '[auth] getCurrentUserStar',
+  getCurrentUserSuccess: '[auth] getCurrentUserSuccess',
+  getCurrentUserFailure: '[auth] getCurrentUserFailure',
+
+  logout: '[auth] logout'
+};
+
+export const actionTypes = {
+  register: '[auth] register',
+  login: '[auth] login',
+  getCurrentUser: '[auth] getCurrentUser',
+  logout: '[auth] logout'
+};
+
+const getters = {
+  [getterTypes.currentUser]: (state) => state.currentUser,
+  [getterTypes.isSubmitting]: (state) => state.isSubmitting,
+  [getterTypes.isLoggedIn]: (state) => state.isLoggedIn,
+};
+
+const mutations = {
+  [mutationTypes.loginStart](state) {
+    state.isSubmitting = true;
+  },
+  [mutationTypes.loginSuccess](state, payload) {
+    state.currentUser = payload;
+    state.isLoggedIn = true;
+    state.isSubmitting = true;
+  },
+  [mutationTypes.loginFailure](state) {
+    state.isSubmitting = false;
+  },
+  [mutationTypes.getCurrentUserStart](state) {
+    state.isSubmitting = true;
+  },
+  [mutationTypes.getCurrentUserSuccess](state, payload) {
+    state.currentUser = payload;
+    state.isLoggedIn = true;
+    state.isSubmitting = true;
+  },
+  [mutationTypes.getCurrentUserFailure](state) {
+    state.isSubmitting = false;
+  },
+  [mutationTypes.logout](state) {
+    state.currentUser = null;
+    state.isLoggedIn = false;
+  }
+};
+
+const actions = {
+  [actionTypes.login]({commit}, credentials) {
+    return new Promise((resolve) => {
+      commit(mutationTypes.loginStart);
+      authApi.login(credentials)
+          .then((response) => {
+            commit(mutationTypes.loginSuccess, response.data.user);
+            setItem('accessToken', response.data.token);
+            resolve(response.data.user);
+          })
+          .catch((result) => {
+            commit(mutationTypes.loginFailure, result);
+          });
+    });
+  },
+  [actionTypes.getCurrentUser]({commit}) {
+    return new Promise(resolve => {
+      commit(mutationTypes.getCurrentUserStart)
+      authApi.getCurrentUser()
+          .then(response => {
+            commit(mutationTypes.getCurrentUserSuccess, response.data.user)
+            resolve()
+          })
+          .catch(() => {
+            commit(mutationTypes.getCurrentUserFailure)
+          })
+    })
+  },
+  [actionTypes.logout]({commit}) {
+    return new Promise(resolve => {
+      setItem('accessToken', '');
+      commit(mutationTypes.logout);
+      resolve();
+    });
+  }
+};
+
+export default {
+  state,
+  mutations,
+  actions,
+  getters,
+};
