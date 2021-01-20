@@ -7,7 +7,7 @@
         <b-navbar-nav class="ml-auto">
           <template v-if="isLoggedIn">
             <b-nav-item-dropdown :text="currentUser.username" right>
-<!--              <b-dropdown-item href="#">Account</b-dropdown-item>-->
+              <b-dropdown-item :to="{name: 'content'}">Information</b-dropdown-item>
               <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
           </template>

@@ -1,23 +1,25 @@
 <template>
   <div v-if="currentUser">
     <div class="container">
-      <wh-statistics
-        v-if="data"
-        :total-volume="totalVolume"
-        :total-count="totalCount"
-        :product-by-categories="productByCategories"
-      />
-      <wh-table
-        v-if="data"
-        :in-stock-products="inStockProducts"
-      />
+      <template v-if="data">
+        <wh-statistics
+            :total-volume="totalVolume"
+            :total-count="totalCount"
+            :product-by-categories="productByCategories"
+        />
+        <wh-control @onSelect="selectedData"/>
+        <wh-table
+            :in-stock-products="inStockProducts"
+        />
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import WhStatistics from '@/components/Statistics';
-import WhTable from '@/components/Table'
+import WhTable from '@/components/Table';
+import WhControl from "@/components/Control"
 import {actionTypes} from "@/store/modules/product";
 import {mapState} from 'vuex';
 import {normalizeName, normalizeNumber, normalizeDate} from '@/helpers/normalizeData'
@@ -27,7 +29,8 @@ export default {
   name: 'WhContent',
   components: {
     WhStatistics,
-    WhTable
+    WhTable,
+    WhControl
   },
   computed: {
     ...mapState({
@@ -80,6 +83,11 @@ export default {
           "shipping_date": normalizeDate(item.shipping_date)
         }
       })
+    }
+  },
+  methods: {
+    selectedData(value) {
+      console.log(value)
     }
   },
   mounted() {

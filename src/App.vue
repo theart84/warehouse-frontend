@@ -8,7 +8,7 @@
 
 <script>
 import WhTopBar from '@/components/TopBar.vue';
-// import WhLayout from '@/components/Layout.vue';
+// import WhLayout from '@/components/StartScreen.vue';
 import {actionTypes} from "@/store/modules/authorization";
 
 export default {
