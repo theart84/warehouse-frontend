@@ -63,6 +63,7 @@ const mutations = {
   [mutationTypes.logout](state) {
     state.currentUser = null;
     state.isLoggedIn = false;
+    state.isSubmitting = false;
   }
 };
 

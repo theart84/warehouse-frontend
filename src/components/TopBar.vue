@@ -7,16 +7,17 @@
         <b-navbar-nav class="ml-auto">
           <template v-if="isLoggedIn">
             <b-nav-item-dropdown :text="currentUser.username" right>
-              <b-dropdown-item :to="{name: 'content'}">Information</b-dropdown-item>
-              <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+              <b-dropdown-item :to="{name: 'information'}">Информация</b-dropdown-item>
+              <b-dropdown-item :to="{name: 'content'}">Таблица</b-dropdown-item>
+              <b-dropdown-item @click="logout">Выход</b-dropdown-item>
             </b-nav-item-dropdown>
           </template>
           <template v-else>
             <b-nav-item>
-              <router-link :to="{name: 'login'}" class="text-white">Sign in</router-link>
+              <router-link :to="{name: 'login'}" class="text-white">Авторизация</router-link>
             </b-nav-item>
             <b-nav-item>
-              <router-link :to="{name: 'register'}" class="text-white">Sign up</router-link>
+              <router-link :to="{name: 'register'}" class="text-white">Регистрация</router-link>
             </b-nav-item>
           </template>
         </b-navbar-nav>

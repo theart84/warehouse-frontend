@@ -19,7 +19,7 @@
         </thead>
         <tbody>
         <tr class="text-center" :class="item.isShipped ? 'table-danger' : ''"
-            v-for="(item, index) in inStockProducts"
+            v-for="(item, index) in serializeData"
             :id="index"
             :key="index"
             @click="hidePopover"
@@ -46,11 +46,14 @@
               <li>Длина: {{item.length}}</li>
               <li>Ширина: {{item.width}}</li>
               <li>Высота: {{item.height}}</li>
+              <li v-if="isAdmin">Входящий объем: {{item.v_prov}}</li>
               <li>Объем: {{item.volume}}</li>
+              <li v-if="isAdmin">Объем база: {{item.v_base}}</li>
               <li v-if="item.shipping_date">Отгружен: {{item.shipping_date}}</li>
               <li v-if="item.transport">Транспорт: {{item.transport}}</li>
               <li v-if="item.driver">Водитель: {{item.driver}}</li>
               <li v-if="item.client">Клиент: {{item.client}}</li>
+
             </ul>
           </b-popover>
         </tr>
@@ -61,10 +64,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: 'WhTable',
   props: {
-    inStockProducts: {
+    serializeData: {
       type: Array,
       default: () => []
     }
@@ -74,6 +78,11 @@ export default {
       screenWidth: window.innerWidth > 700,
       startTap: 0
     }
+  },
+  computed: {
+    ...mapState({
+      isAdmin: state => state.auth.currentUser.isAdmin
+    })
   },
   methods: {
     hidePopover() {
