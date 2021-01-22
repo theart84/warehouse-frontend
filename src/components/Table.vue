@@ -89,6 +89,7 @@ export default {
   },
   methods: {
     choiceProduct(e) {
+      this.$root.$emit('bv::hide::popover')
       e.target.closest('tr').classList.add('row-active')
       setTimeout(() => {
         try {
