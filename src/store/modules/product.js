@@ -1,5 +1,4 @@
 import productApi from "@/api/product";
-import {actionTypes as actionTypesFromAuth} from "@/store/modules/auth";
 
 const state = {
   data: null,
@@ -7,7 +6,7 @@ const state = {
   errors: null,
   filter: {},
   filterData: [],
-  currentElement: null,
+  selectedProduct: null,
   product: null
 }
 
@@ -34,7 +33,9 @@ export const mutationTypes = {
 
   filterData: '[product] Filter data',
 
-  currentElement: '[product] Current element'
+  selectedProductStart: '[product] Selected product start',
+  selectedProductSuccess: '[product] Selected product success',
+  selectedProductFailure: '[product] Selected product failure',
 }
 
 export const getterTypes = {
@@ -50,7 +51,7 @@ export const actionTypes = {
 
   filterData: '[product] Filter data',
 
-  currentElement: '[product] Current element',
+  selectedProduct: '[product] Selected product',
 }
 
 const getters = {
@@ -113,7 +114,7 @@ const mutations = {
     state.isLoading = false;
     const findProduct = state.data.findIndex(item => item._id === payload)
     state.data.splice(findProduct, 1);
-    state.currentElement = null;
+    state.selectedProduct = null;
   },
   [mutationTypes.deleteProductFailure](state, payload) {
     state.isLoading = false;
@@ -129,7 +130,7 @@ const mutations = {
     const findProduct = state.data.findIndex(item => item._id === payload.product._id)
     state.data.splice(findProduct, 1);
     state.data.push(payload.product)
-    state.currentElement = null;
+    state.selectedProduct = null;
   },
   [mutationTypes.soldProductFailure](state, payload) {
     state.isLoading = false;
@@ -148,18 +149,28 @@ const mutations = {
     state.isLoading = false;
     state.errors = payload;
   },
-  //FILTER DATA
+  // FILTER DATA
   [mutationTypes.filterData](state, payload) {
     state.filter = payload;
   },
-  //CURRENT ELEMENT
-  [mutationTypes.currentElement](state, payload) {
-    state.currentElement = payload;
-  }
+  // SELECTED PRODUCT
+  [mutationTypes.selectedProductStart](state) {
+    state.isLoading = true
+    state.selectedProduct = null;
+  },
+  [mutationTypes.selectedProductSuccess](state, payload) {
+    state.isLoading = false
+    state.selectedProduct = payload;
+  },
+  [mutationTypes.selectedProductFailure](state, payload) {
+    state.isLoading = false
+    state.errors = payload;
+  },
+
 };
 
 const actions = {
-  [actionTypes.getProducts]({commit, dispatch}) {
+  [actionTypes.getProducts]({commit}) {
     return new Promise(resolve => {
       commit(mutationTypes.getProductStart);
       productApi
@@ -169,12 +180,11 @@ const actions = {
             resolve(response.data)
           })
           .catch((result) => {
-            dispatch(actionTypesFromAuth.logout);
             commit(mutationTypes.getProductFailure, result);
           })
     })
   },
-  [actionTypes.addProduct]({commit, dispatch}, payload) {
+  [actionTypes.addProduct]({commit}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.addProductStart);
       productApi
@@ -184,13 +194,12 @@ const actions = {
             resolve(response.data);
           })
           .catch((result) => {
-            dispatch(actionTypesFromAuth.logout);
             commit(mutationTypes.addProductFailure, result)
           })
     })
   },
 
-  [actionTypes.deleteProduct]({commit, dispatch}, payload) {
+  [actionTypes.deleteProduct]({commit}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.deleteProductStart);
       productApi
@@ -200,13 +209,12 @@ const actions = {
             resolve(response.id);
           })
           .catch((result) => {
-            dispatch(actionTypesFromAuth.logout);
             commit(mutationTypes.deleteProductFailure, result)
           })
     })
   },
 
-  [actionTypes.soldProduct]({commit, dispatch}, payload) {
+  [actionTypes.soldProduct]({commit}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.soldProductStart);
       productApi
@@ -216,12 +224,11 @@ const actions = {
             resolve(response.product);
           })
           .catch((result) => {
-            dispatch(actionTypesFromAuth.logout);
             commit(mutationTypes.soldProductFailure, result);
           })
     })
   },
-  [actionTypes.editProduct]({commit, dispatch}, payload) {
+  [actionTypes.editProduct]({commit}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.editProductStart);
       productApi
@@ -231,20 +238,28 @@ const actions = {
             resolve(response);
           })
           .catch(result => {
-            dispatch(actionTypesFromAuth.logout);
             commit(mutationTypes.editProductFailure, result);
           })
+    })
+  },
+  [actionTypes.selectedProduct]({commit}, payload) {
+    return new Promise(resolve => {
+      commit(mutationTypes.selectedProductStart);
+      productApi
+        .getOneProduct(payload)
+        .then(response => {
+          commit(mutationTypes.selectedProductSuccess, response.data);
+          resolve(response.data);
+        })
+        .catch(result => {
+          commit(mutationTypes.selectedProductFailure, result);
+        })
     })
   },
 
   [actionTypes.filterData]({commit}, payload) {
     commit(mutationTypes.filterData, payload)
-  },
-
-  [actionTypes.currentElement]({commit}, payload) {
-    commit(mutationTypes.currentElement, payload)
-  },
-
+  }
 }
 
 export default {

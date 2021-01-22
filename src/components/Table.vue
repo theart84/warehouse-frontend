@@ -1,10 +1,10 @@
 <template>
-  <div class="card mx-auto shadow-sm mt-5">
+  <div class="card mx-auto shadow-sm mt-5 mb-5">
     <div class="card-header">
       Таблица
     </div>
     <div class="card-body">
-      <table class="table table-bordered table-sm">
+      <table class="table table-hover table-bordered table-sm unselectable">
         <thead>
         <tr>
           <th scope="col">Месторождение</th>
@@ -89,16 +89,24 @@ export default {
   },
   methods: {
     choiceProduct(e) {
-      const productID = e.target.closest('tr').dataset.id
-      e.target.closest('tr').classList.toggle('row-active')
-      if (e.target.closest('tr').classList.contains('row-active')) {
-        this.$store.dispatch(actionTypes.currentElement, {id: productID});
-      } else {
-        this.$store.dispatch(actionTypes.currentElement, null)
-      }
+      e.target.closest('tr').classList.add('row-active')
       setTimeout(() => {
-        this.$root.$emit('bv::hide::popover')
-      }, 5000)
+        try {
+          document.querySelector('.row-active').classList.remove('row-active');
+        } catch {
+          return;
+        }
+      }, 400)
+      setTimeout(() => {
+        e.target.closest('tr').classList.add('row-active2');
+      }, 400)
+      setTimeout(() => {
+        try {
+          document.querySelector('.row-active2').classList.remove('row-active2');
+        } catch {
+          return;
+        }
+      },  800)
     },
     doubleTap() {
       const endTap = Date.now()
@@ -112,13 +120,17 @@ export default {
     updateWidth() {
       this.screenWidth = window.innerWidth > 700;
     },
-    startEvent() {
-      console.log('Double tap')
-      this.$router.push({name: 'productInfo'});
+    startEvent(e) {
+      const productID = e.target.closest('tr').dataset.id
+      this.$store.dispatch(actionTypes.selectedProduct, {id: productID})
+          .then(() => this.$router.push({name: 'productInfo'}));
 
     },
-    viewProductInfo() {
-      this.$router.push({name: 'productInfo'});
+    viewProductInfo(e) {
+      const productID = e.target.closest('tr').dataset.id
+      this.$store.dispatch(actionTypes.selectedProduct, {id: productID})
+          .then(() => this.$router.push({name: 'productInfo'}));
+
     }
   },
   created() {
@@ -131,5 +143,22 @@ export default {
 .row-active {
   background-color: #409eff !important;
   transition: all 0.3s linear;
+}
+.row-active2 {
+  background-color: #ececec !important;
+  transition: all 0.3s linear;
+}
+
+</style>
+
+<style scoped>
+.unselectable {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
 }
 </style>

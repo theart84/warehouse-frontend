@@ -5,12 +5,21 @@
         Управление
       </div>
       <div class="card-body">
-        <b-form-select class="mb-3" v-model="selected" :options="options" @change="onChange"></b-form-select>
-        <div class="col-xl-12 col-sm-1 d-flex justify-content-between flex-wrap">
-          <b-button class="pl-4 pr-4 mb-2" variant="primary" @click="openModal('modal-add')">Добавить</b-button>
-          <b-button class="pl-4 pr-4 mb-2" variant="primary" @click="deleteProduct" :disabled="!currentElement">Удалить</b-button>
-          <b-button class="pl-4 pr-4 mb-2" variant="primary" @click="openModal('modal-sold')" :disabled="!currentElement">Списать</b-button>
-          <b-button class="pl-4 pr-4 mb-2" variant="primary" @click="openModal('modal-edit')" :disabled="!currentElement">Изменить</b-button>
+        <b-form-select class="mb-3"
+                       v-model="selected"
+                       :options="options"
+                       @change="onChange"
+        />
+        <div class="col-xl-12 col-sm-1 d-flex justify-content-between flex-wrap"
+             v-if="isAdmin"
+        >
+          <b-button
+              class="pl-4 pr-4 mb-2"
+              variant="primary"
+              @click="openModal('modal-add')"
+          >
+            Добавить
+          </b-button>
         </div>
       </div>
     </div>
@@ -26,93 +35,72 @@
         <form ref="formAdd">
           <b-form-group>
             <div v-if="isValid" class="text-danger">Заполните все поля</div>
-            <b-form-select class="mb-3" v-model="formAdd.type" :options="optionsAddProduct"></b-form-select>
-            <b-form-input class="mb-2" v-model="formAdd.number" id="input-type" placeholder="Номер блока"
-                          invalid-feedback="Name is required" required/>
-            <b-form-datepicker id="datePickerAddArrival_date" v-model="formAdd.arrival_date" class="mb-2"/>
-            <b-form-input class="mb-2" v-model="formAdd.length" id="input-length" placeholder="Длина"
-                          invalid-feedback="Name is required" required/>
-            <b-form-input class="mb-2" v-model="formAdd.width" id="input-width" placeholder="Ширина"
-                          invalid-feedback="Name is required" required/>
-            <b-form-input class="mb-2" v-model="formAdd.height" id="input-height" placeholder="Высота"
-                          invalid-feedback="Name is required" required/>
-            <b-form-input class="mb-2" v-model="formAdd.v_prov" id="input-v-prov" placeholder="Входящий объем"
-                          invalid-feedback="Name is required" required/>
+            <b-form-select
+                class="mb-3"
+                v-model="formAdd.type"
+                :options="optionsAddProduct"
+            />
             <b-form-input class="mb-2"
-                          v-model="formAdd.volume"
-                          placeholder="Объем"
-                          required/>
-            <b-form-input class="mb-2"
-                          v-model="formAdd.v_base"
-                          placeholder="Объем для базы"
-                          required></b-form-input>
+                          v-model="formAdd.number"
+                          id="input-type"
+                          placeholder="Номер блока"
+                          invalid-feedback="Name is required"
+                          required
+            />
+            <b-form-datepicker
+                id="datePickerAddArrival_date"
+                v-model="formAdd.arrival_date"
+                class="mb-2"
+            />
+            <b-form-input
+                class="mb-2"
+                v-model="formAdd.length"
+                id="input-length"
+                placeholder="Длина"
+                invalid-feedback="Name is required"
+                required
+            />
+            <b-form-input
+                class="mb-2"
+                v-model="formAdd.width"
+                id="input-width"
+                placeholder="Ширина"
+                invalid-feedback="Name is required"
+                required
+            />
+            <b-form-input
+                class="mb-2"
+                v-model="formAdd.height"
+                id="input-height"
+                placeholder="Высота"
+                invalid-feedback="Name is required"
+                required
+            />
+            <b-form-input
+                class="mb-2"
+                v-model="formAdd.v_prov"
+                id="input-v-prov"
+                placeholder="Входящий объем"
+                invalid-feedback="Name is required"
+                required
+            />
+            <b-form-input
+                class="mb-2"
+                v-model="formAdd.volume"
+                placeholder="Объем"
+                required
+            />
+            <b-form-input
+                class="mb-2"
+                v-model="formAdd.v_base"
+                placeholder="Объем для базы"
+                required
+            />
           </b-form-group>
         </form>
       </b-modal>
-      <b-modal
-          id="modal-sold"
-          ref="modal2"
-          title="Списать блок"
-          @show="resetModalSold"
-          @hidden="resetModalSold"
-          @ok="handleOkSold"
-      >
-        <form ref="formSold">
-          <b-form-group>
-            <div v-if="isValid" class="text-danger">Заполните все поля</div>
-            <b-form-datepicker id="datePickerSoldShipping_date" v-model="formSold.shipping_date" class="mb-2"/>
-            <b-form-input class="mb-2" v-model="formSold.transport" placeholder="Транспорт"
-                          invalid-feedback="Name is required" required/>
-            <b-form-input class="mb-2" v-model="formSold.driver" placeholder="Водитель"
-                          invalid-feedback="Name is required" required/>
-            <b-form-input class="mb-2" v-model="formSold.client" placeholder="Клиент"
-                          invalid-feedback="Name is required" required/>
-          </b-form-group>
-        </form>
-      </b-modal>
-    </template>
-    <b-modal
-        id="modal-edit"
-        ref="modal3"
-        title="Добавить блок"
 
-        @ok="handleOkEdit"
-    >
-      <form ref="formEdit">
-        <b-form-group>
-          <div v-if="isValid" class="text-danger">Заполните все поля</div>
-          <b-form-select class="mb-3" v-model="formEdit.type" :options="optionsAddProduct"/>
-          <b-form-input class="mb-2" v-model="formEdit.number" id="input-type" placeholder="Номер блока"
-                        invalid-feedback="Name is required" required/>
-          <small>Дата прихода<span v-if="formEdit.arrival_date"></span></small>
-          <b-form-datepicker id="datePickerEditArrival_date" v-model="formEdit.arrival_date" class="mb-2"/>
-          <b-form-input class="mb-2" v-model="formEdit.length" id="input-length" placeholder="Длина"
-                        invalid-feedback="Name is required" required/>
-          <b-form-input class="mb-2" v-model="formEdit.width" id="input-width" placeholder="Ширина"
-                        invalid-feedback="Name is required" required/>
-          <b-form-input class="mb-2" v-model="formEdit.height" id="input-height" placeholder="Высота"
-                        invalid-feedback="Name is required" required/>
-          <b-form-input class="mb-2" v-model="formEdit.v_prov" id="input-v-prov" placeholder="Входящий объем"
-                        invalid-feedback="Name is required" required/>
-          <b-form-input class="mb-2"
-                        v-model="formEdit.volume"
-                        placeholder="Объем"
-                        required/>
-          <b-form-input class="mb-2"
-                        v-model="formEdit.v_base"
-                        placeholder="Объем для базы"
-                        required></b-form-input>
-          <small>Дата отгрузки<span v-if="formEdit.shipping_date"></span></small>
-          <b-form-datepicker id="datePickerEditShipping_date" v-model="formEdit.shipping_date" class="mb-2"/>
-          <b-form-input class="mb-2" v-model="formEdit.transport" placeholder="Транспорт"
-                        invalid-feedback="Name is required" required/>
-          <b-form-input class="mb-2" v-model="formEdit.driver" placeholder="Водитель"
-                        invalid-feedback="Name is required" required/>
-          <b-form-input class="mb-2" v-model="formEdit.client" placeholder="Клиент"
-                        invalid-feedback="Name is required" required/>
-        </b-form-group>
-      </form>
-    </b-modal>
+    </template>
   </div>
 </template>
 
@@ -170,35 +158,13 @@ export default {
         "v_prov": '',
         volume: '',
         "v_base": '',
-      },
-      formSold: {
-        "shipping_date": '',
-        transport: '',
-        driver: '',
-        client: '',
-        isShipped: true
-      },
-      formEdit: {
-        type: '',
-        number: '',
-        "arrival_date": '',
-        length: '',
-        width: '',
-        height: '',
-        "v_prov": '',
-        volume: '',
-        "v_base": '',
-        "shipping_date": '',
-        transport: '',
-        driver: '',
-        client: '',
-      },
+      }
     }
   },
   computed: {
     ...mapState({
       isAdmin: state => state.auth.currentUser.isAdmin,
-      currentElement: state => state.product.currentElement
+      selectedProduct: state => state.product.selectedProduct
     })
   },
   methods: {
@@ -259,88 +225,9 @@ export default {
       })
       this.addProduct(this.formAdd)
     },
-    // SOLD MODAL METHODS
-    checkFormValiditySold() {
-      const valid = this.$refs.formSold.checkValidity()
-      this.isValid = !valid
-      return valid
-    },
-    resetModalSold() {
-      this.formSold.shipping_date = ''
-      this.formSold.transport = ''
-      this.formSold.driver = ''
-      this.formSold.client = ''
-      this.isValid = false;
-    },
-    handleOkSold(bvModalEvt) {
-      bvModalEvt.preventDefault()
-      this.handleSubmitSold()
-    },
-    handleSubmitSold() {
-      if (!this.checkFormValiditySold()) {
-        return
-      }
-      this.$nextTick(() => {
-        this.$bvModal.hide('modal-edit')
-      })
-      document.querySelector('.row-active').classList.remove('row-active')
-      this.soldProduct({
-        changedData: this.formSold,
-        productId: this.currentElement
-      })
-
-    },
-    // EDIT MODAL METHODS
-    checkFormValidityEdit() {
-      // const valid = this.$refs.modalEdit.checkValidity()
-      // this.isValid = !valid
-      return true
-    },
-    // resetModalEdit() {
-    //   this.formSold.shipping_date = ''
-    //   this.formSold.transport = ''
-    //   this.formSold.driver = ''
-    //   this.formSold.client = ''
-    //   this.isValid = false;
-    // },
-    handleOkEdit(bvModalEvt) {
-      bvModalEvt.preventDefault()
-      this.handleSubmitEdit()
-    },
-    handleSubmitEdit() {
-      if (!this.checkFormValidityEdit()) {
-        return
-      }
-      this.$nextTick(() => {
-        this.$bvModal.hide('modal-sold')
-      })
-      // document.querySelector('.row-active').classList.remove('row-active')
-      this.editProduct({
-        changedData: this.formEdit,
-        productId: this.currentElement
-      })
-
-    },
     addProduct(data) {
       this.$store.dispatch(actionTypes.addProduct, data)
     },
-    soldProduct(data) {
-      this.$store.dispatch(actionTypes.soldProduct, data)
-    },
-    deleteProduct() {
-      this.$bvModal.msgBoxConfirm('Вы уверены?')
-          .then((value) => {
-            if (!value) {
-              return;
-            }
-            this.$store.dispatch(actionTypes.deleteProduct, this.currentElement)
-          })
-          .catch(() => {
-          });
-    },
-    editProduct(data) {
-      this.$store.dispatch(actionTypes.soldProduct, data)
-    }
   }
 }
 </script>
