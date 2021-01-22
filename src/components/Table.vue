@@ -4,7 +4,7 @@
       Таблица
     </div>
     <div class="card-body">
-      <table class="table table-hover table-bordered table-sm">
+      <table class="table table-bordered table-sm">
         <thead>
         <tr>
           <th scope="col">Месторождение</th>
@@ -22,7 +22,8 @@
             v-for="(item, index) in serializeData"
             :id="index"
             :key="index"
-            @click="hidePopover"
+            @click="choiceProduct"
+            @dblclick="viewProductInfo"
             @touchstart="doubleTap"
             :data-id="item._id">
           <td>{{item.type}}</td>
@@ -65,6 +66,8 @@
 
 <script>
 import {mapState} from 'vuex';
+import {actionTypes} from "@/store/modules/product";
+
 export default {
   name: 'WhTable',
   props: {
@@ -85,7 +88,14 @@ export default {
     })
   },
   methods: {
-    hidePopover() {
+    choiceProduct(e) {
+      const productID = e.target.closest('tr').dataset.id
+      e.target.closest('tr').classList.toggle('row-active')
+      if (e.target.closest('tr').classList.contains('row-active')) {
+        this.$store.dispatch(actionTypes.currentElement, {id: productID});
+      } else {
+        this.$store.dispatch(actionTypes.currentElement, null)
+      }
       setTimeout(() => {
         this.$root.$emit('bv::hide::popover')
       }, 5000)
@@ -97,13 +107,18 @@ export default {
         this.startEvent()
       }
       this.startTap = endTap
+      console.log('Double')
     },
     updateWidth() {
       this.screenWidth = window.innerWidth > 700;
     },
     startEvent() {
       console.log('Double tap')
+      this.$router.push({name: 'productInfo'});
 
+    },
+    viewProductInfo() {
+      this.$router.push({name: 'productInfo'});
     }
   },
   created() {
@@ -111,3 +126,10 @@ export default {
   },
 }
 </script>
+
+<style>
+.row-active {
+  background-color: #409eff !important;
+  transition: all 0.3s linear;
+}
+</style>

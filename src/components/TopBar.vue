@@ -28,8 +28,8 @@
 
 <script>
 import {mapGetters} from 'vuex';
-import {getterTypes} from '@/store/modules/authorization';
-import {actionTypes} from '@/store/modules/authorization';
+import {getterTypes} from '@/store/modules/auth';
+import {actionTypes} from '@/store/modules/auth';
 
 export default {
   name: 'WhTopBar',

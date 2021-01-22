@@ -1,11 +1,13 @@
 import {setItem} from '@/helpers/persistanceStorage';
-import authApi from '../../api/authorization';
+import authApi from '../../api/auth';
 
 const state = {
   currentUser: null,
   isSubmitting: false,
   isLoggedIn: false,
+  errors: null
 };
+
 export const getterTypes = {
   currentUser: '[auth] currentUser',
   isSubmitting: '[auth] isSubmitting',
@@ -40,6 +42,7 @@ const getters = {
 const mutations = {
   [mutationTypes.loginStart](state) {
     state.isSubmitting = true;
+    state.errors = null;
   },
   [mutationTypes.loginSuccess](state, payload) {
     state.currentUser = payload;
@@ -51,14 +54,17 @@ const mutations = {
   },
   [mutationTypes.getCurrentUserStart](state) {
     state.isSubmitting = true;
+    state.errors = null;
   },
   [mutationTypes.getCurrentUserSuccess](state, payload) {
     state.currentUser = payload;
     state.isLoggedIn = true;
     state.isSubmitting = true;
   },
-  [mutationTypes.getCurrentUserFailure](state) {
+  [mutationTypes.getCurrentUserFailure](state, payload) {
     state.isSubmitting = false;
+    state.errors = payload
+
   },
   [mutationTypes.logout](state) {
     state.currentUser = null;
@@ -90,8 +96,8 @@ const actions = {
             commit(mutationTypes.getCurrentUserSuccess, response.data.user)
             resolve()
           })
-          .catch(() => {
-            commit(mutationTypes.getCurrentUserFailure)
+          .catch((result) => {
+            commit(mutationTypes.getCurrentUserFailure, result)
           })
     })
   },

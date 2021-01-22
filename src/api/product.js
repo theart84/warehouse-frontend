@@ -1,12 +1,20 @@
 import axios from './axios';
 
-const getProducts = () => {
-  return axios.get('/product').then(response => response.data);
-}
+const getProducts = () => axios.get('/product').then(response => response.data);
 
-const addProduct = products => axios.post('/product', products).then(response => response.data)
+const addProduct = product => axios.post('/product', product).then(response => response.data);
+
+const deleteProduct = productId => axios.delete(`/product/${productId.id}`);
+
+const patchProduct = productData => axios.patch(`/product/${productData.productId.id}`, productData.changedData).then(response => response.data);
+
+const getOneProduct = productId => axios.get(`/product/${productId.id}`).then(response => response.data);
+
 
 export default {
   getProducts,
-  addProduct
+  addProduct,
+  deleteProduct,
+  patchProduct,
+  getOneProduct
 }

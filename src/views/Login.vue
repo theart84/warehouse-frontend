@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import {actionTypes} from '@/store/modules/authorization';
+import {actionTypes} from '@/store/modules/auth';
 import {mapState} from 'vuex';
 export default {
   name: 'WhLogin',

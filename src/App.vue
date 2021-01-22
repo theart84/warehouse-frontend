@@ -9,7 +9,7 @@
 <script>
 import WhTopBar from '@/components/TopBar.vue';
 // import WhLayout from '@/components/StartScreen.vue';
-import {actionTypes} from "@/store/modules/authorization";
+import {actionTypes} from "@/store/modules/auth";
 
 export default {
   name: 'WhApp',

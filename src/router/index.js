@@ -3,7 +3,8 @@ import VueRouter from 'vue-router';
 import WhLogin from '../views/Login.vue';
 import WhContent from "@/views/Content";
 import StartScreen from "@/components/StartScreen";
-import WhInformation from '@/views/Information'
+import WhInformation from '@/views/Information';
+import WhProductInfo from '@/views/ProductInfo'
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,11 @@ const routes = [
     name: 'information',
     component: WhInformation,
   },
+  {
+    path: '/product',
+    name: 'productInfo',
+    component: WhProductInfo
+  }
 ];
 
 const router = new VueRouter({
