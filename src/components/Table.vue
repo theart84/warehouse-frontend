@@ -5,11 +5,12 @@
     </div>
     <div class="card-body">
       <table class="table table-hover table-bordered table-sm unselectable">
-        <thead>
+        <thead class="text-center">
         <tr>
-          <th scope="col">Месторождение</th>
+          <th scope="col">{{screenWidth ? 'Месторождение' : 'М-е' }}</th>
+          <th scope="col">Номер</th>
           <template v-if="screenWidth">
-            <th scope="col">Номер блока</th>
+
             <th scope="col">Длина</th>
             <th scope="col">Ширина</th>
             <th scope="col">Высота</th>
@@ -27,8 +28,9 @@
             @touchstart="doubleTap"
             :data-id="item._id">
           <td>{{item.type}}</td>
+          <td>{{item.number}}</td>
           <template v-if="screenWidth">
-            <td>{{item.number}}</td>
+
             <td>{{item.length}}</td>
             <td>{{item.width}}</td>
             <td>{{item.height}}</td>

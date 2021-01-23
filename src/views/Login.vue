@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="indent-top">
     <div class="container">
       <div class="card mx-auto shadow-sm mt-5" style="max-width: 35rem;">
         <h1 class="text-center text-secondary mt-2">Авторизация</h1>

@@ -1,7 +1,6 @@
-<template>
-  <div>
+<template v-if="currentUser">
+  <div class="indent-top">
     <wh-loading class="spinner-position" v-if="isLoading" />
-    <div v-if="currentUser">
       <div class="container">
         <template v-if="data">
           <wh-statistics
@@ -11,7 +10,6 @@
           />
         </template>
       </div>
-    </div>
   </div>
 </template>
 

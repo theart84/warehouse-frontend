@@ -1,16 +1,18 @@
 <template>
   <div>
-    <b-navbar class="bg-custom" toggleable="lg" type="light" variant="faded">
+    <b-navbar class="bg-custom shadow" toggleable="lg" type="light" variant="faded" fixed="top">
       <b-navbar-brand :to="{name: 'home'}" class="text-white">Warehouse</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <template v-if="isLoggedIn">
-            <b-nav-item-dropdown :text="currentUser.username" right>
-              <b-dropdown-item :to="{name: 'information'}">Информация</b-dropdown-item>
-              <b-dropdown-item :to="{name: 'content'}">Таблица</b-dropdown-item>
-              <b-dropdown-item @click="logout">Выход</b-dropdown-item>
-            </b-nav-item-dropdown>
+            <b-navbar-nav>
+
+              <b-nav-item><img class="avatar-image" src="https://placekitten.com/g/30/30" alt="Kitten">&nbsp;{{currentUser.username}}</b-nav-item>
+              <b-nav-item :to="{name: 'information'}">Информация</b-nav-item>
+              <b-nav-item :to="{name: 'content'}">Таблица</b-nav-item>
+              <b-nav-item @click="logout">Выход</b-nav-item>
+            </b-navbar-nav>
           </template>
           <template v-else>
             <b-nav-item>
@@ -50,5 +52,14 @@ export default {
 <style scoped>
 .bg-custom {
   background-color: #409EFF;
+}
+.navbar-light .navbar-nav .nav-link {
+  color: #fff;
+}
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #ececec;
+}
+.avatar-image {
+  border-radius: 50%;
 }
 </style>

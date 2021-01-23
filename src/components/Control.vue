@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="indent-top">
     <div class="card mx-auto shadow-sm mt-5">
       <div class="card-header">
         Управление

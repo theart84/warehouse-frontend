@@ -1,14 +1,12 @@
-<template>
+<template v-if="currentUser">
   <div>
     <wh-loading class="spinner-position" v-if="isLoading"/>
-    <div v-if="currentUser">
       <div class="container">
         <template v-if="data">
           <wh-control @onSelect="selectedData" />
           <wh-table :serializeData="serializeData" />
         </template>
       </div>
-    </div>
   </div>
 </template>
 
