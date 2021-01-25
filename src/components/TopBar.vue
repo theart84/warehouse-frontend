@@ -7,7 +7,6 @@
         <b-navbar-nav class="ml-auto">
           <template v-if="isLoggedIn">
             <b-navbar-nav>
-
               <b-nav-item><img class="avatar-image" src="https://placekitten.com/g/30/30" alt="Kitten">&nbsp;{{currentUser.username}}</b-nav-item>
               <b-nav-item :to="{name: 'information'}">Информация</b-nav-item>
               <b-nav-item :to="{name: 'content'}">Таблица</b-nav-item>

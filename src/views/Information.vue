@@ -1,6 +1,8 @@
 <template v-if="currentUser">
-  <div class="indent-top">
-    <wh-loading class="spinner-position" v-if="isLoading" />
+  <div>
+    <wh-error v-if="validationErrors" />
+    <div class="indent-top">
+      <wh-loading class="spinner-position" v-if="isLoading" />
       <div class="container">
         <template v-if="data">
           <wh-statistics
@@ -10,6 +12,7 @@
           />
         </template>
       </div>
+    </div>
   </div>
 </template>
 
@@ -19,10 +22,12 @@ import {mapState} from 'vuex';
 import {normalizeName} from "@/helpers/normalizeData";
 import {actionTypes} from "@/store/modules/product";
 import WhLoading from "@/components/Loading";
+import WhError from "@/components/Error";
 
 export default {
   name: 'WhInformation',
   components: {
+    WhError,
     WhLoading,
     WhStatistics
   },
@@ -30,7 +35,8 @@ export default {
     ...mapState({
       isLoading: state => state.product.isLoading,
       data: state => state.product.data,
-      currentUser: state => state.auth.currentUser
+      currentUser: state => state.auth.currentUser,
+      validationErrors: state => state.product.validationErrors
     }),
     totalVolume() {
       return this.data.reduce((acc, product) => {

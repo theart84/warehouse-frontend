@@ -1,5 +1,6 @@
 <template v-if="currentUser">
   <div>
+    <wh-error v-if="validationErrors" />
     <wh-loading class="spinner-position" v-if="isLoading"/>
       <div class="container">
         <template v-if="data">
@@ -17,11 +18,13 @@ import WhLoading from '@/components/Loading'
 import {actionTypes, getterTypes} from "@/store/modules/product";
 import {mapState, mapGetters} from 'vuex';
 import {normalizeName, normalizeDate, normalizeNumber} from '@/helpers/normalizeData'
+import WhError from "@/components/Error";
 
 
 export default {
   name: 'WhContent',
   components: {
+    WhError,
     WhTable,
     WhControl,
     WhLoading
@@ -30,7 +33,8 @@ export default {
     ...mapState({
       isLoading: state => state.product.isLoading,
       data: state => state.product.data,
-      currentUser: state => state.auth.currentUser
+      currentUser: state => state.auth.currentUser,
+      validationErrors: state => state.product.validationErrors
     }),
     ...mapGetters({
       filterData: getterTypes.filterData
@@ -52,6 +56,7 @@ export default {
       })
     }
   },
+
   methods: {
     selectedData(value) {
       if (value === null) {

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import WhLogin from '../views/Login.vue';
+import WhRegister from '@/views/Register';
 import WhContent from "@/views/Content";
 import StartScreen from "@/components/StartScreen";
 import WhInformation from '@/views/Information';
@@ -18,6 +19,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: WhLogin,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: WhRegister,
   },
   {
     path: '/content',

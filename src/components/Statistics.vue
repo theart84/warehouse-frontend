@@ -19,7 +19,7 @@
         <div class="card-body ">
           <h5 class="card-title">Количество</h5>
           <ul>
-            <li v-for="(item, index) in productByCategories" :key="index">{{item.name}}: {{item.quantity}}шт.;</li>
+            <li v-for="(item, index) in productByCategories" :key="index">{{item.name}}: {{item.quantity}}шт.</li>
           </ul>
         </div>
       </div>

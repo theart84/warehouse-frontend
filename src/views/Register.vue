@@ -5,26 +5,35 @@
         <h1 class="text-center text-secondary mt-2">Авторизация</h1>
         <p class="text-center mt-3">
           <router-link class="text-secondary"
-                       :to="{name: 'register'}"
+                       :to="{name: 'login'}"
           >
-            Нужен аккаунт?
+            Уже есть аккаунт?
           </router-link>
         </p>
         <form @submit.prevent="onSubmit">
           <div class="form-group ml-3 mr-4">
-            <label for="loginEmail">Электронный адрес</label>
+            <label for="emailRegister">Электронный адрес</label>
             <input type="email"
                    class="form-control"
-                   id="loginEmail"
+                   id="emailRegister"
                    required
                    v-model="email"
             >
           </div>
+          <div class="form-group ml-3 mr-4">
+            <label for="usernameRegister">Имя пользователя</label>
+            <input type="text"
+                   class="form-control"
+                   id="usernameRegister"
+                   required
+                   v-model="username"
+            >
+          </div>
           <div class="form-group ml-3 mr-3">
-            <label for="loginPassword">Пароль</label>
+            <label for="passwordRegister">Пароль</label>
             <input type="password"
                    class="form-control"
-                   id="loginPassword"
+                   id="passwordRegister"
                    required
                    v-model="password"
             >
@@ -32,7 +41,7 @@
           <div class="form-group ml-auto text-right mr-3">
             <button type="submit"
                     class="btn btn-primary"
-                    :disabled="isSubmitting"
+                    disabled="disabled"
             >
               Принять
             </button>
@@ -45,23 +54,14 @@
 
 <script>
 import {actionTypes} from '@/store/modules/auth';
-import {mapState} from 'vuex';
 export default {
-  name: 'WhLogin',
+  name: 'WhRegister',
   data() {
     return {
       email: '',
+      username: '',
       password: '',
     };
-  },
-  computed: {
-    ...mapState({
-      isSubmitting: state => state.auth.isSubmitting,
-      validationErrors: state => state.auth.validationErrors
-    })
-  },
-  watch: {
-    validationErrors: 'showError'
   },
   methods: {
     onSubmit() {
@@ -71,15 +71,6 @@ export default {
       }).then(() => {
         this.$router.push({name: 'information'});
       });
-    },
-    showError() {
-      if (this.validationErrors) {
-        this.$bvToast.toast(`${this.validationErrors.message}`, {
-          title: `Information`,
-          solid: true,
-          variant: 'danger'
-        })
-      }
     }
   },
 };

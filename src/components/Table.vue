@@ -19,7 +19,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="text-center" :class="item.isShipped ? 'table-danger' : ''"
+        <tr class="text-center cursor-pointer" :class="item.isShipped ? 'table-danger' : ''"
             v-for="(item, index) in serializeData"
             :id="index"
             :key="index"
@@ -163,5 +163,8 @@ export default {
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 </style>

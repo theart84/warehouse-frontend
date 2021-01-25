@@ -5,7 +5,7 @@ const state = {
   currentUser: null,
   isSubmitting: false,
   isLoggedIn: false,
-  errors: null
+  validationErrors: null
 };
 
 export const getterTypes = {
@@ -42,19 +42,20 @@ const getters = {
 const mutations = {
   [mutationTypes.loginStart](state) {
     state.isSubmitting = true;
-    state.errors = null;
+    state.validationErrors = null;
   },
   [mutationTypes.loginSuccess](state, payload) {
     state.currentUser = payload;
     state.isLoggedIn = true;
     state.isSubmitting = true;
   },
-  [mutationTypes.loginFailure](state) {
+  [mutationTypes.loginFailure](state, payload) {
     state.isSubmitting = false;
+    state.validationErrors = payload;
   },
   [mutationTypes.getCurrentUserStart](state) {
     state.isSubmitting = true;
-    state.errors = null;
+    state.validationErrors = null;
   },
   [mutationTypes.getCurrentUserSuccess](state, payload) {
     state.currentUser = payload;
@@ -63,7 +64,7 @@ const mutations = {
   },
   [mutationTypes.getCurrentUserFailure](state, payload) {
     state.isSubmitting = false;
-    state.errors = payload
+    state.validationErrors = payload
 
   },
   [mutationTypes.logout](state) {
@@ -84,7 +85,7 @@ const actions = {
             resolve(response.data.user);
           })
           .catch((result) => {
-            commit(mutationTypes.loginFailure, result);
+            commit(mutationTypes.loginFailure, result.response.data);
           });
     });
   },
@@ -97,7 +98,7 @@ const actions = {
             resolve()
           })
           .catch((result) => {
-            commit(mutationTypes.getCurrentUserFailure, result)
+            commit(mutationTypes.getCurrentUserFailure, result.response.data)
           })
     })
   },

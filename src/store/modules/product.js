@@ -1,9 +1,10 @@
 import productApi from "@/api/product";
+import {actionTypes as actionTypesFromAuth} from "@/store/modules/auth";
 
 const state = {
   data: null,
   isLoading: false,
-  errors: null,
+  validationErrors: null,
   filter: {},
   filterData: [],
   selectedProduct: null,
@@ -82,7 +83,7 @@ const mutations = {
     state.isLoading = true;
     state.data = null;
     state.filterData = []
-    state.errors = null;
+    state.validationErrors = null;
   },
   [mutationTypes.getProductSuccess](state, payload) {
     state.isLoading = false;
@@ -90,12 +91,12 @@ const mutations = {
   },
   [mutationTypes.getProductFailure](state, payload) {
     state.isLoading = false;
-    state.errors = payload;
+    state.validationErrors = payload;
   },
   // ADD PRODUCT
   [mutationTypes.addProductStart](state) {
     state.isLoading = true;
-    state.errors = null;
+    state.validationErrors = null;
   },
   [mutationTypes.addProductSuccess](state, payload) {
     state.isLoading = false;
@@ -103,12 +104,12 @@ const mutations = {
   },
   [mutationTypes.addProductFailure](state, payload) {
     state.isLoading = false;
-    state.errors = payload;
+    state.validationErrors = payload;
   },
   // DELETE PRODUCT
   [mutationTypes.deleteProductStart](state) {
     state.isLoading = true;
-    state.errors = null;
+    state.validationErrors = null;
   },
   [mutationTypes.deleteProductSuccess](state, payload) {
     state.isLoading = false;
@@ -118,12 +119,12 @@ const mutations = {
   },
   [mutationTypes.deleteProductFailure](state, payload) {
     state.isLoading = false;
-    state.errors = payload;
+    state.validationErrors = payload;
   },
   // SOLD PRODUCT
   [mutationTypes.soldProductStart](state) {
     state.isLoading = true;
-    state.errors = null;
+    state.validationErrors = null;
   },
   [mutationTypes.soldProductSuccess](state, payload) {
     state.isLoading = false;
@@ -134,11 +135,11 @@ const mutations = {
   },
   [mutationTypes.soldProductFailure](state, payload) {
     state.isLoading = false;
-    state.errors = payload;
+    state.validationErrors = payload;
   },
   [mutationTypes.editProductStart](state) {
     state.isLoading = true;
-    state.errors = null;
+    state.validationErrors = null;
   },
   // EDIT MUTATIONS
   [mutationTypes.editProductSuccess](state, payload) {
@@ -147,7 +148,7 @@ const mutations = {
   },
   [mutationTypes.editProductFailure](state, payload) {
     state.isLoading = false;
-    state.errors = payload;
+    state.validationErrors = payload;
   },
   // FILTER DATA
   [mutationTypes.filterData](state, payload) {
@@ -164,13 +165,13 @@ const mutations = {
   },
   [mutationTypes.selectedProductFailure](state, payload) {
     state.isLoading = false
-    state.errors = payload;
+    state.validationErrors = payload;
   },
 
 };
 
 const actions = {
-  [actionTypes.getProducts]({commit}) {
+  [actionTypes.getProducts]({commit, dispatch}) {
     return new Promise(resolve => {
       commit(mutationTypes.getProductStart);
       productApi
@@ -180,11 +181,12 @@ const actions = {
             resolve(response.data)
           })
           .catch((result) => {
-            commit(mutationTypes.getProductFailure, result);
+            dispatch(actionTypesFromAuth.logout);
+            commit(mutationTypes.getProductFailure, result.response.data);
           })
     })
   },
-  [actionTypes.addProduct]({commit}, payload) {
+  [actionTypes.addProduct]({commit, dispatch}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.addProductStart);
       productApi
@@ -194,12 +196,13 @@ const actions = {
             resolve(response.data);
           })
           .catch((result) => {
-            commit(mutationTypes.addProductFailure, result)
+            dispatch(actionTypesFromAuth.logout);
+            commit(mutationTypes.addProductFailure, result.response.data)
           })
     })
   },
 
-  [actionTypes.deleteProduct]({commit}, payload) {
+  [actionTypes.deleteProduct]({commit, dispatch}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.deleteProductStart);
       productApi
@@ -209,12 +212,13 @@ const actions = {
             resolve(response.id);
           })
           .catch((result) => {
-            commit(mutationTypes.deleteProductFailure, result)
+            dispatch(actionTypesFromAuth.logout);
+            commit(mutationTypes.deleteProductFailure, result.response.data)
           })
     })
   },
 
-  [actionTypes.soldProduct]({commit}, payload) {
+  [actionTypes.soldProduct]({commit, dispatch}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.soldProductStart);
       productApi
@@ -224,11 +228,12 @@ const actions = {
             resolve(response.product);
           })
           .catch((result) => {
-            commit(mutationTypes.soldProductFailure, result);
+            dispatch(actionTypesFromAuth.logout);
+            commit(mutationTypes.soldProductFailure, result.response.data);
           })
     })
   },
-  [actionTypes.editProduct]({commit}, payload) {
+  [actionTypes.editProduct]({commit, dispatch}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.editProductStart);
       productApi
@@ -238,11 +243,12 @@ const actions = {
             resolve(response);
           })
           .catch(result => {
-            commit(mutationTypes.editProductFailure, result);
+            dispatch(actionTypesFromAuth.logout);
+            commit(mutationTypes.editProductFailure, result.response.data);
           })
     })
   },
-  [actionTypes.selectedProduct]({commit}, payload) {
+  [actionTypes.selectedProduct]({commit, dispatch}, payload) {
     return new Promise(resolve => {
       commit(mutationTypes.selectedProductStart);
       productApi
@@ -252,7 +258,8 @@ const actions = {
           resolve(response.data);
         })
         .catch(result => {
-          commit(mutationTypes.selectedProductFailure, result);
+          dispatch(actionTypesFromAuth.logout);
+          commit(mutationTypes.selectedProductFailure, result.response.data);
         })
     })
   },
