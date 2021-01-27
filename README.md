@@ -1,24 +1,24 @@
-# frontend
+[![made-with-Vue](https://img.shields.io/badge/Vue.js-2.6.11-42b983.svg)](https://vuejs.org/) [![Bootstrap](https://img.shields.io/badge/Bootstrap-4.0-7952b3.svg)](https://getbootstrap.com/)  [![Bootstrap-Vue](https://img.shields.io/badge/Bootstrap_Vue-2.21.2-563d7c.svg)](https://bootstrap-vue.org/)
+# Warehouse App
 
-## Project setup
-```
-npm install
-```
+## Веб-приложение для работы со складом
+Приложение было создано для упрощения работы со складом.
+![Desktop and mobile version](https://i.ibb.co/LYdH52z/wh-app-duplex.jpg)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Lints and fixes files
-```
-npm run lint
-```
+Реализованные фичи на данный момент:
++ Сортировка по месторождению и наличию
++ Таблица с параметрами каждой позиции в двух вариантах, для mobile и desktop версии.
++ Просмотр каждой позиции отдельно
++ Дополнительный tooltip для каждой позиции в таблицы, для просмотра полных характеристик. Удобно для mobile версии.
++ Списание, удаление и редактирование позиций
+### Демо проекта
+[Warehouse App Demo](https://demo-wh-app.herokuapp.com/)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Login: demo@demo
+
+Password: demo
+
+
+
