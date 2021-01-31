@@ -37,7 +37,7 @@
             <div v-if="isValid" class="text-danger">Заполните все поля</div>
             <b-form-select
                 class="mb-3"
-                v-model="formAdd.type"
+                v-model="selectedAddForm"
                 :options="optionsAddProduct"
             />
             <b-form-input class="mb-2"
@@ -114,6 +114,7 @@ export default {
   data() {
     return {
       selected: null,
+      selectedAddForm: null,
       options: [
         {value: null, text: 'Выбрать нужный фильтр...'},
         {value: {isShipped: null}, text: 'Показать все позиции'},
@@ -133,7 +134,7 @@ export default {
         {value: 'Сары-Тас', text: 'Сары-Тас'},
       ],
       optionsAddProduct: [
-        {value: null, text: 'Месторождение'},
+        {value: null, text: 'Месторождение', disabled: true},
         {value: 'Ж1', text: 'Желтау-1'},
         {value: 'Ж2', text: 'Желтау-2'},
         {value: 'Ж3', text: 'Желтау-3'},
@@ -149,7 +150,6 @@ export default {
       ],
       isValid: false,
       formAdd: {
-        type: '',
         number: '',
         "arrival_date": '',
         length: '',
@@ -201,7 +201,7 @@ export default {
       return valid
     },
     resetModalAdd() {
-      this.formAdd.type = ''
+      this.selectedAddForm = null
       this.formAdd.number = ''
       this.formAdd.arrival_date = ''
       this.formAdd.length = ''
@@ -223,7 +223,10 @@ export default {
       this.$nextTick(() => {
         this.$bvModal.hide('modal-add')
       })
-      this.addProduct(this.formAdd)
+      this.addProduct({
+        ...this.formAdd,
+        type: this.selectedAddForm
+      })
     },
     addProduct(data) {
       this.$store.dispatch(actionTypes.addProduct, data)
