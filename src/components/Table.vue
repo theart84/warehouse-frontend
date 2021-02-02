@@ -7,20 +7,20 @@
       <table class="table table-hover table-bordered table-sm unselectable">
         <thead class="text-center">
         <tr>
-          <th scope="col">{{screenWidth ? 'Месторождение' : 'М-е' }}</th>
-          <th scope="col">Номер</th>
+          <th scope="col" @click="sortParams='type'">{{screenWidth ? 'Месторождение' : 'М-е' }}</th>
+          <th scope="col" @click="sortParams='number'">Номер</th>
           <template v-if="screenWidth">
 
-            <th scope="col">Длина</th>
-            <th scope="col">Ширина</th>
-            <th scope="col">Высота</th>
+            <th scope="col" @click="sortParams='length'">Длина</th>
+            <th scope="col" @click="sortParams='width'">Ширина</th>
+            <th scope="col" @click="sortParams='height'">Высота</th>
           </template>
-          <th scope="col">Объем</th>
+          <th scope="col" @click="sortParams='volume'">Объем</th>
         </tr>
         </thead>
         <tbody>
         <tr class="text-center cursor-pointer" :class="item.isShipped ? 'table-danger' : ''"
-            v-for="(item, index) in serializeData"
+            v-for="(item, index) in sortData"
             :id="index"
             :key="index"
             @click="choiceProduct"
@@ -80,6 +80,7 @@ export default {
   },
   data() {
     return {
+      sortParams: '',
       screenWidth: window.innerWidth > 700,
       startTap: 0
     }
@@ -87,7 +88,15 @@ export default {
   computed: {
     ...mapState({
       isAdmin: state => state.auth.currentUser.isAdmin
-    })
+    }),
+    sortData() {
+      if (!this.sortParams) {
+        return this.serializeData;
+      }
+      return this.serializeData
+          .slice()
+          .sort((prev, next) => prev[this.sortParams] < next[this.sortParams] ? -1 : 1);
+    }
   },
   methods: {
     choiceProduct(e) {
@@ -118,7 +127,6 @@ export default {
         this.startEvent()
       }
       this.startTap = endTap
-      console.log('Double')
     },
     updateWidth() {
       this.screenWidth = window.innerWidth > 700;
