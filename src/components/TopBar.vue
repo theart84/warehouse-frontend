@@ -3,7 +3,7 @@
     <b-navbar class="bg-custom shadow" toggleable="lg" type="light" variant="faded" fixed="top">
       <b-navbar-brand :to="{name: 'home'}" class="text-white">Warehouse</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-collapse id="nav-collapse" is-nav>
+      <b-collapse id="nav-collapse" is-nav :state="true">
         <b-navbar-nav class="ml-auto">
           <template v-if="isLoggedIn">
             <b-navbar-nav>
@@ -73,6 +73,7 @@ export default {
           this.$router.push({ name: 'search' });
         });
       this.searchInput = '';
+      this.$root.$emit('bv::toggle::collapse', 'nav-collapse');
     },
   },
 };
