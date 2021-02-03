@@ -13,13 +13,17 @@
         <div class="card-body ">
           <h5 class="card-title">Объем</h5>
           <ul>
-            <li v-for="(item, index) in productByCategories" :key="index">{{item.name}}: {{item.volume}}м&sup3;</li>
+            <li
+                v-for="(item, index) in productByCategories"
+                :key="index">{{item.name}}: {{item.volume}}м&sup3;</li>
           </ul>
         </div>
         <div class="card-body ">
           <h5 class="card-title">Количество</h5>
           <ul>
-            <li v-for="(item, index) in productByCategories" :key="index">{{item.name}}: {{item.quantity}}шт.</li>
+            <li
+                v-for="(item, index) in productByCategories"
+                :key="index">{{item.name}}: {{item.quantity}}шт.</li>
           </ul>
         </div>
       </div>
@@ -33,15 +37,15 @@ export default {
   props: {
     totalVolume: {
       type: Number,
-      default: 0
+      default: 0,
     },
     totalCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     productByCategories: {
-      type: Object
-    }
-  }
-}
+      type: Object,
+    },
+  },
+};
 </script>

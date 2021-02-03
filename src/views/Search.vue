@@ -1,45 +1,48 @@
 <template v-if="currentUser">
-  <div>
+  <div class="indent-top">
     <wh-error v-if="validationErrors" />
     <wh-loading class="spinner-position" v-if="isLoading"/>
       <div class="container">
         <template v-if="data">
-          <wh-control @onSelect="selectedData" />
-          <wh-table :serializeData="serializeData" />
+          <wh-table v-if="data.quantityResult" :serializeData="serializeData" />
+          <div v-else class="card mx-auto shadow-sm mt-5 mb-5">
+            <div class="card-header">
+              Таблица
+            </div>
+            <div class="card-body text-center">
+              <h4>Ничего не найдено</h4>
+              <button class="btn btn-primary" @click="goToInfo">Назад</button>
+            </div>
+          </div>
         </template>
+
       </div>
   </div>
 </template>
 
 <script>
 import WhTable from '@/components/Table';
-import WhControl from '@/components/Control';
 import WhLoading from '@/components/Loading';
-import { actionTypes, getterTypes } from '@/store/modules/product';
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { normalizeName, normalizeDate, normalizeNumber } from '@/helpers/normalizeData';
 import WhError from '@/components/Error';
 
 export default {
-  name: 'WhContent',
+  name: 'WhSearch',
   components: {
     WhError,
     WhTable,
-    WhControl,
     WhLoading,
   },
   computed: {
     ...mapState({
       isLoading: (state) => state.product.isLoading,
-      data: (state) => state.product.data,
+      data: (state) => state.product.searchResult,
       currentUser: (state) => state.auth.currentUser,
       validationErrors: (state) => state.product.validationErrors,
     }),
-    ...mapGetters({
-      filterData: getterTypes.filterData,
-    }),
     serializeData() {
-      return this.filterData.map((item) => ({
+      return this.data.data.map((item) => ({
         ...item,
         type: normalizeName(item.type),
         arrival_date: normalizeDate(item.arrival_date),
@@ -53,18 +56,10 @@ export default {
       }));
     },
   },
-
   methods: {
-    selectedData(value) {
-      if (value === null) {
-        value = {};
-      }
-      this.$store.dispatch(actionTypes.filterData, value);
+    goToInfo() {
+      this.$router.push({ name: 'information' });
     },
-  },
-  mounted() {
-    this.$store.dispatch(actionTypes.getProducts);
-    this.$store.dispatch(actionTypes.filterData, { isShipped: false, type: 'All' });
   },
 };
 </script>

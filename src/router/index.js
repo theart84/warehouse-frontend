@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import WhLogin from '../views/Login.vue';
 import WhRegister from '@/views/Register';
-import WhContent from "@/views/Content";
-import StartScreen from "@/components/StartScreen";
+import WhContent from '@/views/Content';
+import StartScreen from '@/components/StartScreen';
 import WhInformation from '@/views/Information';
-import WhProductInfo from '@/views/ProductInfo'
+import WhProductInfo from '@/views/ProductInfo';
+import WhSearch from '@/views/Search';
+import WhLogin from '../views/Login.vue';
 
 Vue.use(VueRouter);
 
@@ -38,8 +39,13 @@ const routes = [
   {
     path: '/product',
     name: 'productInfo',
-    component: WhProductInfo
-  }
+    component: WhProductInfo,
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: WhSearch,
+  },
 ];
 
 const router = new VueRouter({
@@ -47,4 +53,3 @@ const router = new VueRouter({
 });
 
 export default router;
-

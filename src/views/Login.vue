@@ -44,8 +44,9 @@
 </template>
 
 <script>
-import {actionTypes} from '@/store/modules/auth';
-import {mapState} from 'vuex';
+import { actionTypes } from '@/store/modules/auth';
+import { mapState } from 'vuex';
+
 export default {
   name: 'WhLogin',
   data() {
@@ -56,31 +57,31 @@ export default {
   },
   computed: {
     ...mapState({
-      isSubmitting: state => state.auth.isSubmitting,
-      validationErrors: state => state.auth.validationErrors
-    })
+      isSubmitting: (state) => state.auth.isSubmitting,
+      validationErrors: (state) => state.auth.validationErrors,
+    }),
   },
   watch: {
-    validationErrors: 'showError'
+    validationErrors: 'showError',
   },
   methods: {
     onSubmit() {
       this.$store.dispatch(actionTypes.login, {
         email: this.email,
-        password: this.password
+        password: this.password,
       }).then(() => {
-        this.$router.push({name: 'information'});
+        this.$router.push({ name: 'information' });
       });
     },
     showError() {
       if (this.validationErrors) {
         this.$bvToast.toast(`${this.validationErrors.message}`, {
-          title: `Information`,
+          title: 'Information',
           solid: true,
-          variant: 'danger'
-        })
+          variant: 'danger',
+        });
       }
-    }
+    },
   },
 };
 </script>

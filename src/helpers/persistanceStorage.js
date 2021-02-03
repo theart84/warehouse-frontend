@@ -4,7 +4,7 @@ export const getItem = (key) => {
   } catch (e) {
     return null;
   }
-}
+};
 
 export const setItem = (key, data) => {
   try {
@@ -12,4 +12,4 @@ export const setItem = (key, data) => {
   } catch (e) {
     console.log('Error saving data in localStorage', e);
   }
-}
+};

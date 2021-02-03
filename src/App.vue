@@ -7,7 +7,7 @@
 
 <script>
 import WhTopBar from '@/components/TopBar.vue';
-import {actionTypes} from "@/store/modules/auth";
+import { actionTypes } from '@/store/modules/auth';
 
 export default {
   name: 'WhApp',
@@ -16,7 +16,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch(actionTypes.getCurrentUser);
-  }
+  },
 };
 </script>
 

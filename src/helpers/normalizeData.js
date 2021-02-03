@@ -25,24 +25,23 @@ export const normalizeName = (name) => {
     case 'Сары-Тас':
       return 'Сары-Тас';
   }
-}
+};
 
 export const normalizeNumber = (number) => {
   if (!number) {
-    return `0`
+    return '0';
   }
   if (String(number).length === 1) {
-    return `${number}.00`
-  } else if (String(number).length === 3) {
-    return `${number}0`
-  } else {
-    return String(number)
+    return `${number}.00`;
+  } if (String(number).length === 3) {
+    return `${number}0`;
   }
-}
+  return String(number);
+};
 
 export const normalizeDate = (date) => {
   if (!date) {
     return;
   }
   return new Date(date).toLocaleDateString();
-}
+};

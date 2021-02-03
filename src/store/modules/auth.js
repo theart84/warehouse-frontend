@@ -1,11 +1,11 @@
-import {setItem} from '@/helpers/persistanceStorage';
+import { setItem } from '@/helpers/persistanceStorage';
 import authApi from '../../api/auth';
 
 const state = {
   currentUser: null,
   isSubmitting: false,
   isLoggedIn: false,
-  validationErrors: null
+  validationErrors: null,
 };
 
 export const getterTypes = {
@@ -23,14 +23,14 @@ export const mutationTypes = {
   getCurrentUserSuccess: '[auth] getCurrentUserSuccess',
   getCurrentUserFailure: '[auth] getCurrentUserFailure',
 
-  logout: '[auth] logout'
+  logout: '[auth] logout',
 };
 
 export const actionTypes = {
   register: '[auth] register',
   login: '[auth] login',
   getCurrentUser: '[auth] getCurrentUser',
-  logout: '[auth] logout'
+  logout: '[auth] logout',
 };
 
 const getters = {
@@ -64,51 +64,50 @@ const mutations = {
   },
   [mutationTypes.getCurrentUserFailure](state, payload) {
     state.isSubmitting = false;
-    state.validationErrors = payload
-
+    state.validationErrors = payload;
   },
   [mutationTypes.logout](state) {
     state.currentUser = null;
     state.isLoggedIn = false;
     state.isSubmitting = false;
-  }
+  },
 };
 
 const actions = {
-  [actionTypes.login]({commit}, credentials) {
+  [actionTypes.login]({ commit }, credentials) {
     return new Promise((resolve) => {
       commit(mutationTypes.loginStart);
       authApi.login(credentials)
-          .then((response) => {
-            commit(mutationTypes.loginSuccess, response.data.user);
-            setItem('accessToken', response.data.token);
-            resolve(response.data.user);
-          })
-          .catch((result) => {
-            commit(mutationTypes.loginFailure, result.response.data);
-          });
+        .then((response) => {
+          commit(mutationTypes.loginSuccess, response.data.user);
+          setItem('accessToken', response.data.token);
+          resolve(response.data.user);
+        })
+        .catch((result) => {
+          commit(mutationTypes.loginFailure, result.response.data);
+        });
     });
   },
-  [actionTypes.getCurrentUser]({commit}) {
-    return new Promise(resolve => {
-      commit(mutationTypes.getCurrentUserStart)
+  [actionTypes.getCurrentUser]({ commit }) {
+    return new Promise((resolve) => {
+      commit(mutationTypes.getCurrentUserStart);
       authApi.getCurrentUser()
-          .then(response => {
-            commit(mutationTypes.getCurrentUserSuccess, response.data.user)
-            resolve()
-          })
-          .catch((result) => {
-            commit(mutationTypes.getCurrentUserFailure, result.response.data)
-          })
-    })
+        .then((response) => {
+          commit(mutationTypes.getCurrentUserSuccess, response.data.user);
+          resolve();
+        })
+        .catch((result) => {
+          commit(mutationTypes.getCurrentUserFailure, result.response.data);
+        });
+    });
   },
-  [actionTypes.logout]({commit}) {
-    return new Promise(resolve => {
+  [actionTypes.logout]({ commit }) {
+    return new Promise((resolve) => {
       setItem('accessToken', '');
       commit(mutationTypes.logout);
       resolve();
     });
-  }
+  },
 };
 
 export default {

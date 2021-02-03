@@ -67,87 +67,85 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
-import {actionTypes} from "@/store/modules/product";
+import { mapState } from 'vuex';
+import { actionTypes } from '@/store/modules/product';
 
 export default {
   name: 'WhTable',
   props: {
     serializeData: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       sortParams: '',
       screenWidth: window.innerWidth > 700,
-      startTap: 0
-    }
+      startTap: 0,
+    };
   },
   computed: {
     ...mapState({
-      isAdmin: state => state.auth.currentUser.isAdmin
+      isAdmin: (state) => state.auth.currentUser.isAdmin,
     }),
     sortData() {
       if (!this.sortParams) {
         return this.serializeData;
       }
       return this.serializeData
-          .slice()
-          .sort((prev, next) => prev[this.sortParams] < next[this.sortParams] ? -1 : 1);
-    }
+        .slice()
+        .sort((prev, next) => (prev[this.sortParams] < next[this.sortParams] ? -1 : 1));
+    },
   },
   methods: {
     choiceProduct(e) {
-      this.$root.$emit('bv::hide::popover')
-      e.target.closest('tr').classList.add('row-active')
+      this.$root.$emit('bv::hide::popover');
+      e.target.closest('tr').classList.add('row-active');
       setTimeout(() => {
         try {
           document.querySelector('.row-active').classList.remove('row-active');
         } catch {
           return;
         }
-      }, 400)
+      }, 400);
       setTimeout(() => {
         e.target.closest('tr').classList.add('row-active2');
-      }, 400)
+      }, 400);
       setTimeout(() => {
         try {
           document.querySelector('.row-active2').classList.remove('row-active2');
         } catch {
           return;
         }
-      },  800)
+      }, 800);
     },
     doubleTap() {
-      const endTap = Date.now()
+      const endTap = Date.now();
       const difference = endTap - this.startTap;
       if (difference < 500) {
-        this.startEvent()
+        this.startEvent();
       }
-      this.startTap = endTap
+      this.startTap = endTap;
     },
     updateWidth() {
       this.screenWidth = window.innerWidth > 700;
     },
     startEvent(e) {
-      const productID = e.target.closest('tr').dataset.id
-      this.$store.dispatch(actionTypes.selectedProduct, {id: productID})
-          .then(() => this.$router.push({name: 'productInfo'}));
-
+      const productID = e.target.closest('tr').dataset.id;
+      this.$store.dispatch(actionTypes.selectedProduct, { id: productID })
+        .then(() => this.$router.push({ name: 'productInfo' }));
     },
     viewProductInfo(e) {
-      const productID = e.target.closest('tr').dataset.id
-      this.$store.dispatch(actionTypes.selectedProduct, {id: productID})
-          .then(() => this.$router.push({name: 'productInfo'}));
-
-    }
+      const productID = e.target.closest('tr').dataset.id;
+      this.$store.dispatch(actionTypes.selectedProduct, { id: productID })
+        .then(() => this.$router.push({ name: 'productInfo' }));
+    },
   },
   created() {
     window.addEventListener('resize', this.updateWidth);
   },
-}
+};
 </script>
 
 <style>

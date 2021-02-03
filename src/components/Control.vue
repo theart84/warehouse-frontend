@@ -105,8 +105,8 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
-import {actionTypes} from "@/store/modules/product";
+import { mapState } from 'vuex';
+import { actionTypes } from '@/store/modules/product';
 
 export default {
   name: 'WhControl',
@@ -116,121 +116,121 @@ export default {
       selected: null,
       selectedAddForm: null,
       options: [
-        {value: null, text: 'Выбрать нужный фильтр...'},
-        {value: {isShipped: null}, text: 'Показать все позиции'},
-        {value: {isShipped: false, type: 'All'}, text: 'Показать все из наличия'},
-        {value: {isShipped: true}, text: 'Показать все списанное'},
-        {value: 'Ж1', text: 'Желтау-1'},
-        {value: 'Ж2', text: 'Желтау-2'},
-        {value: 'Ж3', text: 'Желтау-3'},
-        {value: 'Ж5', text: 'Желтау-5'},
-        {value: 'Ж7', text: 'Желтау-7'},
-        {value: 'Ж9', text: 'Желтау-9'},
-        {value: 'Ж11', text: 'Желтау-11'},
-        {value: 'ЖН', text: 'Желтау-Надежда'},
-        {value: 'КТ', text: 'Куртинский темный'},
-        {value: 'КСВ', text: 'Куртинский светлый'},
-        {value: 'Капал Аросан', text: 'Капал Аросан'},
-        {value: 'Сары-Тас', text: 'Сары-Тас'},
+        { value: null, text: 'Выбрать нужный фильтр...' },
+        { value: { isShipped: null }, text: 'Показать все позиции' },
+        { value: { isShipped: false, type: 'All' }, text: 'Показать все из наличия' },
+        { value: { isShipped: true }, text: 'Показать все списанное' },
+        { value: 'Ж1', text: 'Желтау-1' },
+        { value: 'Ж2', text: 'Желтау-2' },
+        { value: 'Ж3', text: 'Желтау-3' },
+        { value: 'Ж5', text: 'Желтау-5' },
+        { value: 'Ж7', text: 'Желтау-7' },
+        { value: 'Ж9', text: 'Желтау-9' },
+        { value: 'Ж11', text: 'Желтау-11' },
+        { value: 'ЖН', text: 'Желтау-Надежда' },
+        { value: 'КТ', text: 'Куртинский темный' },
+        { value: 'КСВ', text: 'Куртинский светлый' },
+        { value: 'Капал Аросан', text: 'Капал Аросан' },
+        { value: 'Сары-Тас', text: 'Сары-Тас' },
       ],
       optionsAddProduct: [
-        {value: null, text: 'Месторождение', disabled: true},
-        {value: 'Ж1', text: 'Желтау-1'},
-        {value: 'Ж2', text: 'Желтау-2'},
-        {value: 'Ж3', text: 'Желтау-3'},
-        {value: 'Ж5', text: 'Желтау-5'},
-        {value: 'Ж7', text: 'Желтау-7'},
-        {value: 'Ж9', text: 'Желтау-9'},
-        {value: 'Ж11', text: 'Желтау-11'},
-        {value: 'ЖН', text: 'Желтау-Надежда'},
-        {value: 'КТ', text: 'Куртинский темный'},
-        {value: 'КСВ', text: 'Куртинский светлый'},
-        {value: 'Капал Аросан', text: 'Капал Аросан'},
-        {value: 'Сары-Тас', text: 'Сары-Тас'},
+        { value: null, text: 'Месторождение', disabled: true },
+        { value: 'Ж1', text: 'Желтау-1' },
+        { value: 'Ж2', text: 'Желтау-2' },
+        { value: 'Ж3', text: 'Желтау-3' },
+        { value: 'Ж5', text: 'Желтау-5' },
+        { value: 'Ж7', text: 'Желтау-7' },
+        { value: 'Ж9', text: 'Желтау-9' },
+        { value: 'Ж11', text: 'Желтау-11' },
+        { value: 'ЖН', text: 'Желтау-Надежда' },
+        { value: 'КТ', text: 'Куртинский темный' },
+        { value: 'КСВ', text: 'Куртинский светлый' },
+        { value: 'Капал Аросан', text: 'Капал Аросан' },
+        { value: 'Сары-Тас', text: 'Сары-Тас' },
       ],
       isValid: false,
       formAdd: {
         number: '',
-        "arrival_date": '',
+        arrival_date: '',
         length: '',
         width: '',
         height: '',
-        "v_prov": '',
+        v_prov: '',
         volume: '',
-        "v_base": '',
-      }
-    }
+        v_base: '',
+      },
+    };
   },
   computed: {
     ...mapState({
-      isAdmin: state => state.auth.currentUser.isAdmin,
-      selectedProduct: state => state.product.selectedProduct
-    })
+      isAdmin: (state) => state.auth.currentUser.isAdmin,
+      selectedProduct: (state) => state.product.selectedProduct,
+    }),
   },
   methods: {
     openModal(params) {
-      this.$bvModal.show(params)
+      this.$bvModal.show(params);
       if (params === 'modal-edit') {
-        this.$store.dispatch(actionTypes.editProduct, this.currentElement).then(response => {
+        this.$store.dispatch(actionTypes.editProduct, this.currentElement).then((response) => {
           this.formEdit = {
             type: response.data.type,
             number: response.data.number,
-            "arrival_date": response.data.arrival_date,
+            arrival_date: response.data.arrival_date,
             length: response.data.length,
             width: response.data.width,
             height: response.data.height,
-            "v_prov": response.data.v_prov,
+            v_prov: response.data.v_prov,
             volume: response.data.volume,
-            "v_base": response.data.v_base,
-            "shipping_date": response.data.shipping_date,
+            v_base: response.data.v_base,
+            shipping_date: response.data.shipping_date,
             transport: response.data.transport,
             driver: response.data.driver,
             client: response.data.client,
-          }
+          };
         });
         document.querySelector('.row-active').classList.remove('row-active');
       }
     },
     onChange() {
-      this.$emit('onSelect', this.selected)
+      this.$emit('onSelect', this.selected);
     },
     // ADD MODAL METHODS
     checkFormValidityAdd() {
-      const valid = this.$refs.formAdd.checkValidity()
-      this.isValid = !valid
-      return valid
+      const valid = this.$refs.formAdd.checkValidity();
+      this.isValid = !valid;
+      return valid;
     },
     resetModalAdd() {
-      this.selectedAddForm = null
-      this.formAdd.number = ''
-      this.formAdd.arrival_date = ''
-      this.formAdd.length = ''
-      this.formAdd.width = ''
-      this.formAdd.height = ''
-      this.formAdd.v_prov = ''
-      this.formAdd.volume = ''
-      this.formAdd.v_base = ''
+      this.selectedAddForm = null;
+      this.formAdd.number = '';
+      this.formAdd.arrival_date = '';
+      this.formAdd.length = '';
+      this.formAdd.width = '';
+      this.formAdd.height = '';
+      this.formAdd.v_prov = '';
+      this.formAdd.volume = '';
+      this.formAdd.v_base = '';
       this.isValid = false;
     },
     handleOkAdd(bvModalEvt) {
-      bvModalEvt.preventDefault()
-      this.handleSubmitAdd()
+      bvModalEvt.preventDefault();
+      this.handleSubmitAdd();
     },
     handleSubmitAdd() {
       if (!this.checkFormValidityAdd()) {
-        return
+        return;
       }
       this.$nextTick(() => {
-        this.$bvModal.hide('modal-add')
-      })
+        this.$bvModal.hide('modal-add');
+      });
       this.addProduct({
         ...this.formAdd,
-        type: this.selectedAddForm
-      })
+        type: this.selectedAddForm,
+      });
     },
     addProduct(data) {
-      this.$store.dispatch(actionTypes.addProduct, data)
+      this.$store.dispatch(actionTypes.addProduct, data);
     },
-  }
-}
+  },
+};
 </script>

@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import {actionTypes} from '@/store/modules/auth';
+import { actionTypes } from '@/store/modules/auth';
+
 export default {
   name: 'WhRegister',
   data() {
@@ -67,11 +68,11 @@ export default {
     onSubmit() {
       this.$store.dispatch(actionTypes.login, {
         email: this.email,
-        password: this.password
+        password: this.password,
       }).then(() => {
-        this.$router.push({name: 'information'});
+        this.$router.push({ name: 'information' });
       });
-    }
+    },
   },
 };
 </script>

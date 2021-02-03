@@ -13,7 +13,7 @@
 
 export default {
   name: 'WhError',
-}
+};
 </script>
 
 <style>

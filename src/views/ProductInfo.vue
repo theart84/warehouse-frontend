@@ -204,17 +204,17 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from 'vuex';
 import WhLoading from '@/components/Loading';
-import {normalizeNumber} from "@/helpers/normalizeData";
-import {actionTypes} from "@/store/modules/product";
-import WhError from "@/components/Error";
+import { normalizeNumber } from '@/helpers/normalizeData';
+import { actionTypes } from '@/store/modules/product';
+import WhError from '@/components/Error';
 
 export default {
   name: 'WhProductInfo',
   components: {
     WhError,
-    WhLoading
+    WhLoading,
   },
   data() {
     return {
@@ -222,51 +222,51 @@ export default {
       formButtons: false,
       soldButtonIsActive: true,
       optionsAddProduct: [
-        {value: null, text: 'Месторождение'},
-        {value: 'Ж1', text: 'Желтау-1'},
-        {value: 'Ж2', text: 'Желтау-2'},
-        {value: 'Ж3', text: 'Желтау-3'},
-        {value: 'Ж5', text: 'Желтау-5'},
-        {value: 'Ж7', text: 'Желтау-7'},
-        {value: 'Ж9', text: 'Желтау-9'},
-        {value: 'Ж11', text: 'Желтау-11'},
-        {value: 'ЖН', text: 'Желтау-Надежда'},
-        {value: 'КТ', text: 'Куртинский темный'},
-        {value: 'КСВ', text: 'Куртинский светлый'},
-        {value: 'Капал Аросан', text: 'Капал Аросан'},
-        {value: 'Сары-Тас', text: 'Сары-Тас'},
+        { value: null, text: 'Месторождение' },
+        { value: 'Ж1', text: 'Желтау-1' },
+        { value: 'Ж2', text: 'Желтау-2' },
+        { value: 'Ж3', text: 'Желтау-3' },
+        { value: 'Ж5', text: 'Желтау-5' },
+        { value: 'Ж7', text: 'Желтау-7' },
+        { value: 'Ж9', text: 'Желтау-9' },
+        { value: 'Ж11', text: 'Желтау-11' },
+        { value: 'ЖН', text: 'Желтау-Надежда' },
+        { value: 'КТ', text: 'Куртинский темный' },
+        { value: 'КСВ', text: 'Куртинский светлый' },
+        { value: 'Капал Аросан', text: 'Капал Аросан' },
+        { value: 'Сары-Тас', text: 'Сары-Тас' },
       ],
-    }
+    };
   },
   computed: {
     ...mapState({
-      isLoading: state => state.product.isLoading,
-      currentUser: state => state.auth.currentUser,
-      product: state => state.product.selectedProduct,
-      isAdmin: state => state.auth.currentUser.isAdmin,
-      validationErrors: state => state.product.validationErrors
+      isLoading: (state) => state.product.isLoading,
+      currentUser: (state) => state.auth.currentUser,
+      product: (state) => state.product.selectedProduct,
+      isAdmin: (state) => state.auth.currentUser.isAdmin,
+      validationErrors: (state) => state.product.validationErrors,
     }),
     form() {
       if (!this.product) {
-        return {}
+        return {};
       }
       return {
         type: this.product.type,
         number: this.product.number,
-        "arrival_date": this.product.arrival_date,
+        arrival_date: this.product.arrival_date,
         length: normalizeNumber(this.product.length),
         width: normalizeNumber(this.product.width),
         height: normalizeNumber(this.product.height),
-        "v_prov": normalizeNumber(this.product.v_prov),
+        v_prov: normalizeNumber(this.product.v_prov),
         volume: normalizeNumber(this.product.volume),
-        "v_base": normalizeNumber(this.product.v_base),
-        "shipping_date": this.product.shipping_date,
+        v_base: normalizeNumber(this.product.v_base),
+        shipping_date: this.product.shipping_date,
         transport: this.product.transport,
         driver: this.product.driver,
         client: this.product.client,
         description: this.product.description,
-      }
-    }
+      };
+    },
   },
   methods: {
     onSoldProduct() {
@@ -283,7 +283,6 @@ export default {
       this.form.driver = '';
       this.form.client = '';
       this.form.description = '';
-
     },
     edit() {
       this.soldButtonIsActive = false;
@@ -295,14 +294,14 @@ export default {
         this.soldProduct({
           changedData: {
             ...this.form,
-            isShipped: true
+            isShipped: true,
           },
-          productId: this.product._id
+          productId: this.product._id,
         });
       } else {
         this.soldProduct({
           changedData: this.form,
-          productId: this.product._id
+          productId: this.product._id,
         });
       }
     },
@@ -310,13 +309,13 @@ export default {
       const isConfirm = confirm('Вы действительно хотите удалить');
       if (isConfirm) {
         this.$store.dispatch(actionTypes.deleteProduct, this.product._id)
-            .then(() => this.$router.push({name: 'content'}))
+          .then(() => this.$router.push({ name: 'content' }));
       }
     },
     soldProduct(data) {
       this.$store.dispatch(actionTypes.soldProduct, data)
-        .then(() => this.$router.push({name: 'content'}));
-    }
-  }
-}
+        .then(() => this.$router.push({ name: 'content' }));
+    },
+  },
+};
 </script>
