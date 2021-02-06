@@ -1,4 +1,4 @@
-import { setItem } from '@/helpers/persistanceStorage';
+import {setItem} from '@/helpers/persistanceStorage';
 import authApi from '../../api/auth';
 
 const state = {
@@ -15,13 +15,17 @@ export const getterTypes = {
 };
 
 export const mutationTypes = {
-  loginStart: '[auth] loginStart',
-  loginSuccess: '[auth] loginSuccess',
-  loginFailure: '[auth] loginFailure',
+  loginStart: '[auth] Login start',
+  loginSuccess: '[auth] Login success',
+  loginFailure: '[auth] Login failure',
 
-  getCurrentUserStart: '[auth] getCurrentUserStar',
-  getCurrentUserSuccess: '[auth] getCurrentUserSuccess',
-  getCurrentUserFailure: '[auth] getCurrentUserFailure',
+  registerStart: '[auth] Register start',
+  registerSuccess: '[auth] Register success',
+  registerFailure: '[auth] Register failure',
+
+  getCurrentUserStart: '[auth] Get current user start',
+  getCurrentUserSuccess: '[auth] Get current user success',
+  getCurrentUserFailure: '[auth] Get current user failure',
 
   logout: '[auth] logout',
 };
@@ -40,6 +44,7 @@ const getters = {
 };
 
 const mutations = {
+  // LOGIN
   [mutationTypes.loginStart](state) {
     state.isSubmitting = true;
     state.validationErrors = null;
@@ -53,6 +58,17 @@ const mutations = {
     state.isSubmitting = false;
     state.validationErrors = payload;
   },
+  // REGISTER
+  [mutationTypes.registerStart](state) {
+    state.validationErrors = null;
+  },
+  [mutationTypes.registerSuccess](state) {
+    state.currentUser = null;
+  },
+  [mutationTypes.registerFailure](state, payload) {
+    state.validationErrors = payload;
+  },
+  // GET CURRENT USER
   [mutationTypes.getCurrentUserStart](state) {
     state.isSubmitting = true;
     state.validationErrors = null;
@@ -66,6 +82,7 @@ const mutations = {
     state.isSubmitting = false;
     state.validationErrors = payload;
   },
+  //LOGOUT
   [mutationTypes.logout](state) {
     state.currentUser = null;
     state.isLoggedIn = false;
@@ -74,34 +91,47 @@ const mutations = {
 };
 
 const actions = {
-  [actionTypes.login]({ commit }, credentials) {
+  [actionTypes.login]({commit}, credentials) {
     return new Promise((resolve) => {
       commit(mutationTypes.loginStart);
       authApi.login(credentials)
-        .then((response) => {
-          commit(mutationTypes.loginSuccess, response.data.user);
-          setItem('accessToken', response.data.token);
-          resolve(response.data.user);
-        })
-        .catch((result) => {
-          commit(mutationTypes.loginFailure, result.response.data);
-        });
+          .then((response) => {
+            commit(mutationTypes.loginSuccess, response.data.user);
+            setItem('accessToken', response.data.token);
+            resolve(response.data.user);
+          })
+          .catch((result) => {
+            commit(mutationTypes.loginFailure, result.response.data);
+          });
     });
   },
-  [actionTypes.getCurrentUser]({ commit }) {
+  [actionTypes.register]({commit}, credentials) {
+    return new Promise((resolve) => {
+      commit(mutationTypes.registerStart);
+      authApi.register(credentials)
+          .then((response) => {
+            commit(mutationTypes.registerSuccess);
+            resolve(response);
+          })
+          .catch((result) => {
+            commit(mutationTypes.registerFailure, result.response.data);
+          });
+    });
+  },
+  [actionTypes.getCurrentUser]({commit}) {
     return new Promise((resolve) => {
       commit(mutationTypes.getCurrentUserStart);
       authApi.getCurrentUser()
-        .then((response) => {
-          commit(mutationTypes.getCurrentUserSuccess, response.data.user);
-          resolve();
-        })
-        .catch((result) => {
-          commit(mutationTypes.getCurrentUserFailure, result.response.data);
-        });
+          .then((response) => {
+            commit(mutationTypes.getCurrentUserSuccess, response.data.user);
+            resolve();
+          })
+          .catch((result) => {
+            commit(mutationTypes.getCurrentUserFailure, result.response.data);
+          });
     });
   },
-  [actionTypes.logout]({ commit }) {
+  [actionTypes.logout]({commit}) {
     return new Promise((resolve) => {
       setItem('accessToken', '');
       commit(mutationTypes.logout);

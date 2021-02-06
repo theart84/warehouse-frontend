@@ -56,7 +56,6 @@
               <li v-if="item.transport">Транспорт: {{item.transport}}</li>
               <li v-if="item.driver">Водитель: {{item.driver}}</li>
               <li v-if="item.client">Клиент: {{item.client}}</li>
-
             </ul>
           </b-popover>
         </tr>
