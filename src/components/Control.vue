@@ -28,9 +28,12 @@
           id="modal-add"
           ref="modal1"
           title="Добавить блок"
+          cancel-title="Отменить"
+          ok-title="Добавить"
           @show="resetModalAdd"
           @hidden="resetModalAdd"
           @ok="handleOkAdd"
+          :ok-disabled="!isDisabled"
       >
         <form ref="formAdd">
           <b-form-group>
@@ -44,7 +47,6 @@
                           v-model="formAdd.number"
                           id="input-type"
                           placeholder="Номер блока"
-                          invalid-feedback="Name is required"
                           required
             />
             <b-form-datepicker
@@ -57,7 +59,6 @@
                 v-model="formAdd.length"
                 id="input-length"
                 placeholder="Длина"
-                invalid-feedback="Name is required"
                 required
             />
             <b-form-input
@@ -65,7 +66,6 @@
                 v-model="formAdd.width"
                 id="input-width"
                 placeholder="Ширина"
-                invalid-feedback="Name is required"
                 required
             />
             <b-form-input
@@ -73,7 +73,6 @@
                 v-model="formAdd.height"
                 id="input-height"
                 placeholder="Высота"
-                invalid-feedback="Name is required"
                 required
             />
             <b-form-input
@@ -81,7 +80,6 @@
                 v-model="formAdd.v_prov"
                 id="input-v-prov"
                 placeholder="Входящий объем"
-                invalid-feedback="Name is required"
                 required
             />
             <b-form-input
@@ -99,7 +97,6 @@
           </b-form-group>
         </form>
       </b-modal>
-
     </template>
   </div>
 </template>
@@ -166,40 +163,18 @@ export default {
       isAdmin: (state) => state.auth.currentUser.isAdmin,
       selectedProduct: (state) => state.product.selectedProduct,
     }),
+    isDisabled() {
+      return this.selectedAddForm && Object.values(this.formAdd).every((item) => !!item);
+    }
   },
   methods: {
     openModal(params) {
       this.$bvModal.show(params);
-      if (params === 'modal-edit') {
-        this.$store.dispatch(actionTypes.editProduct, this.currentElement).then((response) => {
-          this.formEdit = {
-            type: response.data.type,
-            number: response.data.number,
-            arrival_date: response.data.arrival_date,
-            length: response.data.length,
-            width: response.data.width,
-            height: response.data.height,
-            v_prov: response.data.v_prov,
-            volume: response.data.volume,
-            v_base: response.data.v_base,
-            shipping_date: response.data.shipping_date,
-            transport: response.data.transport,
-            driver: response.data.driver,
-            client: response.data.client,
-          };
-        });
-        document.querySelector('.row-active').classList.remove('row-active');
-      }
     },
     onChange() {
       this.$emit('onSelect', this.selected);
     },
     // ADD MODAL METHODS
-    checkFormValidityAdd() {
-      const valid = this.$refs.formAdd.checkValidity();
-      this.isValid = !valid;
-      return valid;
-    },
     resetModalAdd() {
       this.selectedAddForm = null;
       this.formAdd.number = '';
@@ -217,9 +192,6 @@ export default {
       this.handleSubmitAdd();
     },
     handleSubmitAdd() {
-      if (!this.checkFormValidityAdd()) {
-        return;
-      }
       this.$nextTick(() => {
         this.$bvModal.hide('modal-add');
       });

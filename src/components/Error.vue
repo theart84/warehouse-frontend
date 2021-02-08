@@ -21,5 +21,6 @@ export default {
   position: absolute;
   top: calc(50vh - 170px);
   left: calc(50% - 160px);
+  z-index: 10;
 }
 </style>

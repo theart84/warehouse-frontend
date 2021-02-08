@@ -51,7 +51,7 @@
                     class="btn btn-primary"
                     disabled="disabled"
             >
-              Регистрация в данный момент отключена
+              Регистрация не доступна
             </button>
           </div>
         </form>
