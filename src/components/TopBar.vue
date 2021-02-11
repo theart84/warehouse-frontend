@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       searchInput: '',
+      screenWidth: window.innerWidth > 700
     };
   },
   computed: {
@@ -73,7 +74,9 @@ export default {
           this.$router.push({ name: 'search' });
         });
       this.searchInput = '';
-      this.$root.$emit('bv::toggle::collapse', 'nav-collapse');
+      if (!this.screenWidth) {
+        this.$root.$emit('bv::toggle::collapse', 'nav-collapse');
+      }
     },
   },
 };

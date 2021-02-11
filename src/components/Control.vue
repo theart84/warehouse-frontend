@@ -37,7 +37,6 @@
       >
         <form ref="formAdd">
           <b-form-group>
-            <div v-if="isValid" class="text-danger">Заполните все поля</div>
             <b-form-select
                 class="mb-3"
                 v-model="selectedAddForm"
@@ -145,7 +144,6 @@ export default {
         { value: 'Капал Аросан', text: 'Капал Аросан' },
         { value: 'Сары-Тас', text: 'Сары-Тас' },
       ],
-      isValid: false,
       formAdd: {
         number: '',
         arrival_date: '',
@@ -185,7 +183,6 @@ export default {
       this.formAdd.v_prov = '';
       this.formAdd.volume = '';
       this.formAdd.v_base = '';
-      this.isValid = false;
     },
     handleOkAdd(bvModalEvt) {
       bvModalEvt.preventDefault();
