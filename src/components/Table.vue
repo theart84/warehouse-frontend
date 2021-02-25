@@ -7,15 +7,14 @@
       <table class="table table-hover table-bordered table-sm unselectable">
         <thead class="text-center">
         <tr>
-          <th scope="col" @click="sortParams='type'">{{screenWidth ? 'Месторождение' : 'М-е' }}</th>
-          <th scope="col" @click="sortParams='number'">Номер</th>
+          <th scope="col" @click="changeDirection('type')">{{ screenWidth ? 'Месторождение' : 'М-е' }}</th>
+          <th scope="col" @click="changeDirection('number')">Номер</th>
           <template v-if="screenWidth">
-
-            <th scope="col" @click="sortParams='length'">Длина</th>
-            <th scope="col" @click="sortParams='width'">Ширина</th>
-            <th scope="col" @click="sortParams='height'">Высота</th>
+            <th scope="col" @click="changeDirection('length')">Длина</th>
+            <th scope="col" @click="changeDirection('width')">Ширина</th>
+            <th scope="col" @click="changeDirection('height')">Высота</th>
           </template>
-          <th scope="col" @click="sortParams='volume'">Объем</th>
+          <th scope="col" @click="changeDirection('volume')">Объем</th>
         </tr>
         </thead>
         <tbody>
@@ -27,15 +26,15 @@
             @dblclick="viewProductInfo"
             @touchstart="doubleTap"
             :data-id="item._id">
-          <td>{{item.type}}</td>
-          <td>{{item.number}}</td>
+          <td>{{ item.type }}</td>
+          <td>{{ item.number }}</td>
           <template v-if="screenWidth">
 
-            <td>{{item.length}}</td>
-            <td>{{item.width}}</td>
-            <td>{{item.height}}</td>
+            <td>{{ item.length }}</td>
+            <td>{{ item.width }}</td>
+            <td>{{ item.height }}</td>
           </template>
-          <td>{{item.volume}}</td>
+          <td>{{ item.volume }}</td>
           <b-popover :target="String(index)"
                      triggers="click"
                      placement="top"
@@ -43,19 +42,19 @@
           >
             <template #title> Информация</template>
             <ul class="list-unstyled">
-              <li>М/е: {{item.type}}</li>
-              <li>Приход: {{item.arrival_date}}</li>
-              <li>Номер: {{item.number}}</li>
-              <li>Длина: {{item.length}}</li>
-              <li>Ширина: {{item.width}}</li>
-              <li>Высота: {{item.height}}</li>
-              <li v-if="isAdmin">Входящий объем: {{item.v_prov}}</li>
-              <li>Объем: {{item.volume}}</li>
-              <li v-if="isAdmin">Объем база: {{item.v_base}}</li>
-              <li v-if="item.shipping_date">Отгружен: {{item.shipping_date}}</li>
-              <li v-if="item.transport">Транспорт: {{item.transport}}</li>
-              <li v-if="item.driver">Водитель: {{item.driver}}</li>
-              <li v-if="item.client">Клиент: {{item.client}}</li>
+              <li>М/е: {{ item.type }}</li>
+              <li>Приход: {{ item.arrival_date }}</li>
+              <li>Номер: {{ item.number }}</li>
+              <li>Длина: {{ item.length }}</li>
+              <li>Ширина: {{ item.width }}</li>
+              <li>Высота: {{ item.height }}</li>
+              <li v-if="isAdmin">Входящий объем: {{ item.v_prov }}</li>
+              <li>Объем: {{ item.volume }}</li>
+              <li v-if="isAdmin">Объем база: {{ item.v_base }}</li>
+              <li v-if="item.shipping_date">Отгружен: {{ item.shipping_date }}</li>
+              <li v-if="item.transport">Транспорт: {{ item.transport }}</li>
+              <li v-if="item.driver">Водитель: {{ item.driver }}</li>
+              <li v-if="item.client">Клиент: {{ item.client }}</li>
             </ul>
           </b-popover>
         </tr>
@@ -66,8 +65,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { actionTypes } from '@/store/modules/product';
+import {mapState} from 'vuex';
+import {actionTypes} from '@/store/modules/product';
 
 export default {
   name: 'WhTable',
@@ -80,6 +79,7 @@ export default {
   data() {
     return {
       sortParams: '',
+      sortDirection: true,
       screenWidth: window.innerWidth > 700,
       startTap: 0,
     };
@@ -92,9 +92,17 @@ export default {
       if (!this.sortParams) {
         return this.serializeData;
       }
-      return this.serializeData
-        .slice()
-        .sort((prev, next) => (prev[this.sortParams] < next[this.sortParams] ? -1 : 1));
+      if (this.sortDirection) {
+        return this.serializeData
+            .slice()
+            .sort((prev, next) => (prev[this.sortParams] < next[this.sortParams] ? 1 : -1));
+      }
+      if (!this.sortDirection) {
+        return this.serializeData
+            .slice()
+            .sort((prev, next) => (prev[this.sortParams] < next[this.sortParams] ? -1 : 1));
+      }
+      return null;
     },
   },
   methods: {
@@ -119,6 +127,10 @@ export default {
         }
       }, 800);
     },
+    changeDirection(params) {
+      this.sortParams = params;
+      this.sortDirection = !this.sortDirection;
+    },
     doubleTap() {
       const endTap = Date.now();
       const difference = endTap - this.startTap;
@@ -132,13 +144,13 @@ export default {
     },
     startEvent(e) {
       const productID = e.target.closest('tr').dataset.id;
-      this.$store.dispatch(actionTypes.selectedProduct, { id: productID })
-        .then(() => this.$router.push({ name: 'productInfo' }));
+      this.$store.dispatch(actionTypes.selectedProduct, {id: productID})
+          .then(() => this.$router.push({name: 'productInfo'}));
     },
     viewProductInfo(e) {
       const productID = e.target.closest('tr').dataset.id;
-      this.$store.dispatch(actionTypes.selectedProduct, { id: productID })
-        .then(() => this.$router.push({ name: 'productInfo' }));
+      this.$store.dispatch(actionTypes.selectedProduct, {id: productID})
+          .then(() => this.$router.push({name: 'productInfo'}));
     },
   },
   created() {
@@ -152,6 +164,7 @@ export default {
   background-color: #409eff !important;
   transition: all 0.3s linear;
 }
+
 .row-active2 {
   background-color: #ececec !important;
   transition: all 0.3s linear;
@@ -162,13 +175,15 @@ export default {
 <style scoped>
 .unselectable {
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* Non-prefixed version, currently
-                                  not supported by any browser */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                         not supported by any browser */
 }
+
 .cursor-pointer {
   cursor: pointer;
 }
