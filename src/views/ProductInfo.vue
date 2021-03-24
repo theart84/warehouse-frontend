@@ -285,12 +285,18 @@ export default {
       this.form.description = '';
     },
     edit() {
-      this.soldButtonIsActive = false;
-      this.editButtonIsActive = false;
-      this.formButtons = true;
+      if (this.product.isShipped) {
+        this.soldButtonIsActive = false;
+        this.editButtonIsActive = false;
+        this.formButtons = true;
+      } else {
+        this.soldButtonIsActive = true;
+        this.editButtonIsActive = false;
+        this.formButtons = true;
+      }
     },
     onSubmit() {
-      if (!this.soldButtonIsActive) {
+      if (!this.soldButtonIsActive && !this.product.isShipped) {
         this.soldProduct({
           changedData: {
             ...this.form,
